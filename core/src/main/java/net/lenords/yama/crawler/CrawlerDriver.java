@@ -2,8 +2,10 @@ package net.lenords.yama.crawler;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import net.lenords.yama.crawler.conf.CrawlerConf;
 import net.lenords.yama.crawler.conf.SeleniumDriverType;
+import net.lenords.yama.model.CrawlerRequest;
 import net.lenords.yama.util.lang.StrUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,6 +14,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class CrawlerDriver {
   private WebDriver driver;
@@ -23,8 +26,9 @@ public class CrawlerDriver {
     initDriver(driverConf);
   }
 
-  public String requestAndGet(String request) {
-    return null;
+  public String requestAndGet(CrawlerRequest request) {
+    driver.get(request.getUrl());
+    return driver.getPageSource();
   }
 
 
@@ -61,6 +65,9 @@ public class CrawlerDriver {
         if (!StrUtils.isNullEmpty(config.getUserAgent())) {
           options.addArguments("--user-agent=" + config.getUserAgent());
         }
+        if (!config.runJs()) {
+          additonalPrefs.put("profile.managed_default_content_settings.javascript", 2);
+        }
 
         if (!additonalPrefs.isEmpty()) {
           options.setExperimentalOption("prefs", additonalPrefs);
@@ -89,6 +96,7 @@ public class CrawlerDriver {
         break;
 
       case HTMLUNIT:
+        DesiredCapabilities caps = DesiredCapabilities.htmlUnit();
 
 
         if (config.runJs()) {
@@ -99,6 +107,12 @@ public class CrawlerDriver {
 
         break;
     }
+
+    //this means if you dont want a load timeout, set the prop to < 0
+    if (config.getPageLoadTimeout() > 0) {
+      driver.manage().timeouts().pageLoadTimeout(config.getPageLoadTimeout(), TimeUnit.SECONDS);
+    }
+
   }
 
 

@@ -3,18 +3,21 @@ package net.lenords.yama.crawler.conf;
 public class CrawlerConf {
   private static final boolean DEFAULT_HEADLESS = true, DEFAULT_IN_SERVER = true;
   private static final String DEFAULT_CUSTOM_ARGS = null, DEFAULT_UA = null;
+  private static final int DEFAULT_PL_TIMEOUT = 30;
 
   private SeleniumDriverType driver;
   private boolean headless, loadImg, runJs, inServerMode;
   private String customArgs, userAgent;
+  private int pageLoadTimeout;
 
 
   public CrawlerConf(SeleniumDriverType type, boolean loadImg, boolean runJs) {
-    this(type, DEFAULT_HEADLESS, loadImg, runJs, DEFAULT_IN_SERVER, DEFAULT_CUSTOM_ARGS, DEFAULT_UA);
+    this(type, DEFAULT_HEADLESS, loadImg, runJs, DEFAULT_IN_SERVER, DEFAULT_CUSTOM_ARGS,
+        DEFAULT_UA, DEFAULT_PL_TIMEOUT);
   }
 
   public CrawlerConf(SeleniumDriverType driver, boolean headless, boolean loadImg, boolean runJs,
-      boolean inServerMode, String customArgs, String defaultUserAgent) {
+      boolean inServerMode, String customArgs, String defaultUserAgent, int pageLoadTimeout) {
     this.driver = driver;
     this.headless = headless;
     this.loadImg = loadImg;
@@ -22,6 +25,7 @@ public class CrawlerConf {
     this.inServerMode = inServerMode;
     this.customArgs = customArgs;
     this.userAgent = defaultUserAgent;
+    this.pageLoadTimeout = pageLoadTimeout;
   }
 
   public SeleniumDriverType getDriverType() {
@@ -91,5 +95,13 @@ public class CrawlerConf {
         ", customArgs='" + customArgs + '\'' +
         ", defaultUserAgent='" + userAgent + '\'' +
         '}';
+  }
+
+  public int getPageLoadTimeout() {
+    return pageLoadTimeout;
+  }
+
+  public void setPageLoadTimeout(int pageLoadTimeout) {
+    this.pageLoadTimeout = pageLoadTimeout;
   }
 }
