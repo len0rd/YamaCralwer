@@ -1,0 +1,22 @@
+subprojects {
+    group 'net.lenords'
+    version '0.0.1-SNAPSHOT'
+    apply plugin: 'java'
+
+    sourceCompatibility = 1.9
+
+    repositories {
+        mavenCentral()
+        flatDir {
+            //this is applied to subproject builds, so we need to go up a level to get to lib
+            dirs '../ext_lib'
+        }
+    }
+
+    dependencies {
+
+        //test dependencies
+        testCompile('org.junit.jupiter:junit-jupiter-api:5.0.1')
+        testRuntime('org.junit.jupiter:junit-jupiter-engine:5.0.1')
+    }
+}

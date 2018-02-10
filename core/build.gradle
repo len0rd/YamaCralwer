@@ -1,0 +1,9 @@
+
+dependencies {
+
+    // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.9.1'
+
+    // https://mvnrepository.com/artifact/org.seleniumhq.selenium/htmlunit-driver
+    compile group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.29.1'
+}
