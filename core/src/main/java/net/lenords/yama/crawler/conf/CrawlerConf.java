@@ -1,21 +1,27 @@
 package net.lenords.yama.crawler.conf;
 
 public class CrawlerConf {
+  private static final boolean DEFAULT_HEADLESS = true, DEFAULT_IN_SERVER = true;
+  private static final String DEFAULT_CUSTOM_ARGS = null, DEFAULT_UA = null;
+
   private SeleniumDriverType driver;
   private boolean headless, loadImg, runJs, inServerMode;
-  private String customArgs, defaultUserAgent;
+  private String customArgs, userAgent;
 
 
-  public CrawlerConf(SeleniumDriverType type, boolean runJs, boolean loadImg) {
-    this.driver = type;
-    this.runJs = runJs;
+  public CrawlerConf(SeleniumDriverType type, boolean loadImg, boolean runJs) {
+    this(type, DEFAULT_HEADLESS, loadImg, runJs, DEFAULT_IN_SERVER, DEFAULT_CUSTOM_ARGS, DEFAULT_UA);
+  }
+
+  public CrawlerConf(SeleniumDriverType driver, boolean headless, boolean loadImg, boolean runJs,
+      boolean inServerMode, String customArgs, String defaultUserAgent) {
+    this.driver = driver;
+    this.headless = headless;
     this.loadImg = loadImg;
-
-    //set defaults
-    this.headless = true;
-    this.inServerMode = true;
-    this.customArgs = null;
-    this.defaultUserAgent = null;
+    this.runJs = runJs;
+    this.inServerMode = inServerMode;
+    this.customArgs = customArgs;
+    this.userAgent = defaultUserAgent;
   }
 
   public SeleniumDriverType getDriverType() {
@@ -58,12 +64,12 @@ public class CrawlerConf {
     this.runJs = runJs;
   }
 
-  public String getDefaultUserAgent() {
-    return defaultUserAgent;
+  public String getUserAgent() {
+    return userAgent;
   }
 
-  public void setDefaultUserAgent(String defaultUserAgent) {
-    this.defaultUserAgent = defaultUserAgent;
+  public void setUserAgent(String defaultUserAgent) {
+    this.userAgent = defaultUserAgent;
   }
 
   public String getCustomArgs() {
@@ -83,7 +89,7 @@ public class CrawlerConf {
         ", runJs=" + runJs +
         ", inServerMode=" + inServerMode +
         ", customArgs='" + customArgs + '\'' +
-        ", defaultUserAgent='" + defaultUserAgent + '\'' +
+        ", defaultUserAgent='" + userAgent + '\'' +
         '}';
   }
 }

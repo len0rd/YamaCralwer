@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 public class CrawlerDriver {
@@ -35,36 +36,58 @@ public class CrawlerDriver {
     return driver.toString();
   }
 
+  public void close() {
+    if (driver != null) {
+      driver.quit();
+    }
+  }
+
   private void initDriver(CrawlerConf config) {
     switch (config.getDriverType()) {
       case CHROME:
-        Map<String, Object> addtionalPrefs = new HashMap<>();
+        Map<String, Object> additonalPrefs = new HashMap<>();
         ChromeOptions options = new ChromeOptions();
 
-        if (config.isHeadless() || config.inServerMode()) {
+        if (config.inServerMode()) {
+          //if running in server mode, its also headless
+          options.addArguments("--headless", "--disable-gpu", "--no-sandbox");
+        } else if (config.isHeadless()) {
           options.addArguments("--headless");
         }
+
         if (!config.loadImgs()) {
-          addtionalPrefs.put("profile.managed_default_content_settings.images", 2);
+          additonalPrefs.put("profile.managed_default_content_settings.images", 2);
         }
-        if (!StrUtils.isNullEmpty(config.getDefaultUserAgent())) {
-          options.addArguments("--user-agent=" + config.getDefaultUserAgent());
-        }
-        if (config.inServerMode()) {
-          options.addArguments("--disable-gpu", "--no-sandbox");
+        if (!StrUtils.isNullEmpty(config.getUserAgent())) {
+          options.addArguments("--user-agent=" + config.getUserAgent());
         }
 
-        if (!addtionalPrefs.isEmpty()) {
-          options.setExperimentalOption("prefs", addtionalPrefs);
+        if (!additonalPrefs.isEmpty()) {
+          options.setExperimentalOption("prefs", additonalPrefs);
         }
         this.driver = new ChromeDriver(options);
         break;
+
       case FIREFOX:
+        FirefoxOptions ffOptions = new FirefoxOptions();
 
-        //"webdriver.gecko.driver"
+        if (config.isHeadless() || config.inServerMode()) {
+          ffOptions.setHeadless(true);
+        }
 
-        this.driver = new FirefoxDriver();
+        if (!StrUtils.isNullEmpty(config.getUserAgent())) {
+          ffOptions.addPreference("general.useragent.override", config.getUserAgent());
+        }
+        if (!config.loadImgs()) {
+          ffOptions.addPreference("permissions.default.image", 2);
+        }
+        if (!config.runJs()) {
+          ffOptions.addPreference("javascript.enabled", false);
+        }
+
+        this.driver = new FirefoxDriver(ffOptions);
         break;
+
       case HTMLUNIT:
 
 
