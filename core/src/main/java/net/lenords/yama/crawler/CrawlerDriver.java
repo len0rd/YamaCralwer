@@ -1,11 +1,13 @@
 package net.lenords.yama.crawler;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.BrowserVersion.BrowserVersionBuilder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import net.lenords.yama.crawler.conf.CrawlerConf;
-import net.lenords.yama.crawler.conf.SeleniumDriverType;
 import net.lenords.yama.model.CrawlerRequest;
+import net.lenords.yama.proxy.ProxyProvider;
 import net.lenords.yama.util.lang.StrUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -14,16 +16,20 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class CrawlerDriver {
   private WebDriver driver;
-  private SeleniumDriverType type;
+  private CrawlerConf config;
+
+  public CrawlerDriver(CrawlerConf driverConf, ProxyProvider proxyProvider) {
+    this.config = driverConf;
+    initDriver(driverConf, proxyProvider);
+  }
 
   public CrawlerDriver(CrawlerConf driverConf) {
-
+    this.config = driverConf;
     String yama = "山";
-    initDriver(driverConf);
+    initDriver(driverConf, null);
   }
 
   public String requestAndGet(CrawlerRequest request) {
@@ -31,6 +37,18 @@ public class CrawlerDriver {
     return driver.getPageSource();
   }
 
+  public String getCurrentSource() {
+    return driver.getPageSource();
+  }
+
+  public void changeProxy(ProxyProvider newProxy) {
+    switch (config.getDriverType()) {
+      case CHROME:
+        close();
+        initDriver(config, newProxy);
+        break;
+    }
+  }
 
   public String clickAndGet(By clickBy) {
     return null;
@@ -40,15 +58,19 @@ public class CrawlerDriver {
     return driver.toString();
   }
 
+  public CrawlerConf getConfig() {
+    return config;
+  }
+
   public void close() {
     if (driver != null) {
       driver.quit();
     }
   }
 
-  private void initDriver(CrawlerConf config) {
+  private void initDriver(CrawlerConf config, ProxyProvider proxyProvider) {
     switch (config.getDriverType()) {
-      case CHROME:
+      case CHROME: //Properly configure the chrome driver:
         Map<String, Object> additonalPrefs = new HashMap<>();
         ChromeOptions options = new ChromeOptions();
 
@@ -59,6 +81,9 @@ public class CrawlerDriver {
           options.addArguments("--headless");
         }
 
+        if (proxyProvider != null) {
+          options.setProxy(proxyProvider.generateChromeProxy());
+        }
         if (!config.loadImgs()) {
           additonalPrefs.put("profile.managed_default_content_settings.images", 2);
         }
@@ -75,7 +100,7 @@ public class CrawlerDriver {
         this.driver = new ChromeDriver(options);
         break;
 
-      case FIREFOX:
+      case FIREFOX: //Properly  configure the firefox driver:
         FirefoxOptions ffOptions = new FirefoxOptions();
 
         if (config.isHeadless() || config.inServerMode()) {
@@ -95,20 +120,25 @@ public class CrawlerDriver {
         this.driver = new FirefoxDriver(ffOptions);
         break;
 
-      case HTMLUNIT:
-        DesiredCapabilities caps = DesiredCapabilities.htmlUnit();
-
-
-        if (config.runJs()) {
-          this.driver = new HtmlUnitDriver(true);
-        } else {
-          this.driver = new HtmlUnitDriver();
+      case HTMLUNIT: //Properly configure HtmlUnit driver:
+        BrowserVersion browserVersion = BrowserVersion.getDefault();
+        //since htmlunit is already headless, this cuts down on the number of config options
+        //this constructor needs to deal with
+        if (!StrUtils.isNullEmpty(config.getUserAgent())) {
+          BrowserVersion.BrowserVersionBuilder builder = new BrowserVersionBuilder(BrowserVersion.BEST_SUPPORTED);
+          builder.setUserAgent(config.getUserAgent());
+          browserVersion = builder.build();
         }
 
+        if (config.runJs()) {
+          this.driver = new HtmlUnitDriver(browserVersion, true);
+        } else {
+          this.driver = new HtmlUnitDriver(browserVersion);
+        }
         break;
     }
 
-    //this means if you dont want a load timeout, set the prop to < 0
+    //if you dont want a load timeout, set the prop to < 0
     if (config.getPageLoadTimeout() > 0) {
       driver.manage().timeouts().pageLoadTimeout(config.getPageLoadTimeout(), TimeUnit.SECONDS);
     }
