@@ -3,7 +3,9 @@ package net.lenords.yama.crawler;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.BrowserVersion.BrowserVersionBuilder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 import net.lenords.yama.crawler.conf.CrawlerConf;
 import net.lenords.yama.model.CrawlerRequest;
@@ -11,6 +13,7 @@ import net.lenords.yama.proxy.ProxyProvider;
 import net.lenords.yama.util.lang.StrUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -28,13 +31,17 @@ public class CrawlerDriver {
 
   public CrawlerDriver(CrawlerConf driverConf) {
     this.config = driverConf;
-    String yama = "山";
+    String yama = "山クローラ"; //Yama Kurōra
     initDriver(driverConf, null);
   }
 
   public String requestAndGet(CrawlerRequest request) {
     driver.get(request.getUrl());
     return driver.getPageSource();
+  }
+
+  public void goBack() {
+    driver.navigate().back();
   }
 
   public String getCurrentSource() {
@@ -50,8 +57,34 @@ public class CrawlerDriver {
     }
   }
 
-  public String clickAndGet(By clickBy) {
-    return null;
+  public String clickAndGetFirst(By clickBy) {
+    try  {
+      WebElement firstElement = driver.findElement(clickBy);
+      return clickAndGet(firstElement);
+    } catch (NoSuchElementException nse) {
+      return null;
+    }
+  }
+
+  public WebElement getFirstElement(By getBy) {
+    try  {
+      return driver.findElement(getBy);
+    } catch (NoSuchElementException nse) {
+      return null;
+    }
+  }
+
+  public String clickAndGet(WebElement clickElement) {
+    clickElement.click();
+    return driver.getPageSource();
+  }
+
+  public List<WebElement> getAllElementsOf(By getBy) {
+    return driver.findElements(getBy);
+  }
+
+  public List<WebElement> getAllElementsOf(By getBy, WebElement elementToSelectFrom) {
+    return elementToSelectFrom.findElements(getBy);
   }
 
   public String getDriverInfo() {
