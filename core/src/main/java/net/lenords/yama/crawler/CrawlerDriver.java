@@ -74,9 +74,31 @@ public class CrawlerDriver {
     }
   }
 
+  public String getInnerHtml(By elementsInnerHtmlToGet) {
+    WebElement el = getFirstElement(elementsInnerHtmlToGet);
+    if (el != null) {
+      return el.getAttribute("innerHTML");
+    }
+    return null;
+  }
+
   public String clickAndGet(WebElement clickElement) {
     clickElement.click();
     return driver.getPageSource();
+  }
+
+  public String getElementContents(By getBy) {
+    WebElement gottenElement = getFirstElement(getBy);
+    return gottenElement != null ? gottenElement.getText() : null;
+  }
+
+  public String getElementContents(By subExtractor, WebElement mainElement) {
+    try {
+      WebElement subElement = mainElement.findElement(subExtractor);
+      return subElement.getText();
+    } catch (NoSuchElementException nse) {
+      return null;
+    }
   }
 
   public List<WebElement> getAllElementsOf(By getBy) {
