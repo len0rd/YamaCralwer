@@ -1,0 +1,10 @@
+dependencies {
+
+    // Mysql connector
+    compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
+
+    // for connection pooling
+    compile group: 'org.apache.commons', name: 'commons-pool2', version: '2.5.0'
+    compile group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.2.0'
+
+}

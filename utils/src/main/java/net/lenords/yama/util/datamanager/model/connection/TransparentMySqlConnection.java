@@ -3,7 +3,7 @@ package net.lenords.yama.util.datamanager.model.connection;
 import java.sql.Connection;
 import java.sql.SQLException;
 import net.lenords.yama.util.datamanager.model.conf.ConnectionConfig;
-import net.lenords.yama.util.datamanager.model.conf.MySqlConnectionConfig;
+import net.lenords.yama.util.datamanager.model.conf.SqlConnectionConfig;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 public class TransparentMySqlConnection implements TransparentConnection {
@@ -14,13 +14,13 @@ public class TransparentMySqlConnection implements TransparentConnection {
     this.dataSource = null;
   }
 
-  public TransparentMySqlConnection(MySqlConnectionConfig mysqlConn) {
+  public TransparentMySqlConnection(SqlConnectionConfig mysqlConn) {
     this();
     this.connConf = mysqlConn;
     createConnection(mysqlConn);
   }
 
-  protected void createConnection(MySqlConnectionConfig mysqlConn) {
+  protected void createConnection(SqlConnectionConfig mysqlConn) {
 
     if (dataSource != null) {
       try {

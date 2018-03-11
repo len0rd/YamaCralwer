@@ -31,7 +31,7 @@ public class CrawlerDriver {
 
   public CrawlerDriver(CrawlerConf driverConf) {
     this.config = driverConf;
-    String yama = "山クローラ"; //Yama Kurōra
+    String yamaKurora = "山クローラ"; //Yama Kurōra
     initDriver(driverConf, null);
   }
 

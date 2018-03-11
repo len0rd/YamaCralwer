@@ -1,10 +1,9 @@
 package net.lenords.yama.model.events;
 
-public interface EventListener extends Runnable {
+public abstract class EventListener<T> {
 
-  String getName();
+  public abstract String getName();
 
-  @Override
-  void run();
+  public abstract void run(T contextInfo);
 
 }

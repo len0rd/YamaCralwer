@@ -1,22 +1,22 @@
 package net.lenords.yama.util.datamanager.model.conf;
 
-public class MySqlConnectionConfig extends ConnectionConfig {
+public class SqlConnectionConfig extends ConnectionConfig {
   private String database;
   private Boolean useSSL;
 
-  public MySqlConnectionConfig(String host, String user, String pass, int port, boolean enabled) {
+  public SqlConnectionConfig(String host, String user, String pass, int port, boolean enabled) {
     super(host, user, pass, port, enabled);
     this.useSSL = null;
   }
 
-  public MySqlConnectionConfig(String host, String user, String pass, int port, boolean enabled,
+  public SqlConnectionConfig(String host, String user, String pass, int port, boolean enabled,
       String database, Boolean useSSL) {
     super(host, user, pass, port, enabled);
     this.database = database;
     this.useSSL = useSSL;
   }
 
-  public MySqlConnectionConfig(String host, String user, String pass, int port, boolean enabled,
+  public SqlConnectionConfig(String host, String user, String pass, int port, boolean enabled,
       Boolean useSSL) {
     super(host, user, pass, port, enabled);
     this.useSSL = useSSL;

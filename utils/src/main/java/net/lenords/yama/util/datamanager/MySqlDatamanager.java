@@ -13,9 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.lenords.yama.model.data.DataNode;
 import net.lenords.yama.util.datamanager.model.Schema;
-import net.lenords.yama.util.datamanager.model.conf.MySqlConnectionConfig;
+import net.lenords.yama.util.datamanager.model.conf.SqlConnectionConfig;
 import net.lenords.yama.util.datamanager.model.connection.TransparentConnection;
 import net.lenords.yama.util.datamanager.model.connection.TransparentMySqlConnection;
 
@@ -24,22 +23,22 @@ public class MySqlDatamanager {
   private TransparentConnection conn;
   private Map<String, Schema> schemas;
 
-  public MySqlDatamanager(MySqlConnectionConfig config) {
+  public MySqlDatamanager(SqlConnectionConfig config) {
     this.conn = new TransparentMySqlConnection(config);
     buildSchemas();
   }
 
   public MySqlDatamanager(String host, String user, String pass, String database, int port) {
-    this(new MySqlConnectionConfig(host, user, pass, port, true, database, false));
+    this(new SqlConnectionConfig(host, user, pass, port, true, database, false));
   }
 
   public MySqlDatamanager(String jsonConfigLocation) {
     Gson gson = new Gson();
     System.out.println("Getting configuration");
 
-    MySqlConnectionConfig mysqlConn = null;
+    SqlConnectionConfig mysqlConn = null;
     try  {
-      mysqlConn = gson.fromJson(new FileReader(getAbsolutePath() + jsonConfigLocation), MySqlConnectionConfig.class);
+      mysqlConn = gson.fromJson(new FileReader(getAbsolutePath() + jsonConfigLocation), SqlConnectionConfig.class);
 
     } catch (FileNotFoundException e) {
       System.out.println("ERR:: Failed to find mysql config. Any query attempt will fail");
@@ -61,7 +60,7 @@ public class MySqlDatamanager {
     this(DEFAULT_MYSQL_CONF_LOCATION);
   }
 
-  public void insert(String table, DataNode data) {
+  public void insert(String table, Map<String, Object> data) {
     //check for valid table
     table = table.toLowerCase();
     if (!schemas.containsKey(table)) {
@@ -105,7 +104,7 @@ public class MySqlDatamanager {
 
   private void buildSchemas() {
     schemas = new HashMap<>();
-    MySqlConnectionConfig conf = (MySqlConnectionConfig) conn.getConnectionConf();
+    SqlConnectionConfig conf = (SqlConnectionConfig) conn.getConnectionConf();
     String getTableNames;
     if (conf.hasDatabase()) {
       getTableNames = "SELECT table_name FROM information_schema.tables WHERE table_schema=?;";

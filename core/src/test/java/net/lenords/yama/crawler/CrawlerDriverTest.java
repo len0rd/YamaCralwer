@@ -2,7 +2,6 @@ package net.lenords.yama.crawler;
 
 import net.lenords.yama.crawler.conf.CrawlerConf;
 import net.lenords.yama.crawler.conf.SeleniumDriverType;
-import net.lenords.yama.model.CrawlerRequest;
 import org.junit.jupiter.api.Assertions;
 
 public class CrawlerDriverTest {

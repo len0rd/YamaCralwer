@@ -1,7 +1,8 @@
 package net.lenords.yama.crawler.conf;
 
 public class CrawlerConf {
-  private static final boolean DEFAULT_HEADLESS = true, DEFAULT_IN_SERVER = true;
+  private static final boolean DEFAULT_HEADLESS = true, DEFAULT_IN_SERVER = true,
+          DEFAULT_LOAD_IMG = false, DEFAULT_RUN_JS = true;
   private static final String DEFAULT_CUSTOM_ARGS = null, DEFAULT_UA = null;
   private static final int DEFAULT_PL_TIMEOUT = 30;
 
@@ -10,6 +11,9 @@ public class CrawlerConf {
   private String customArgs, userAgent;
   private int pageLoadTimeout;
 
+  public CrawlerConf(SeleniumDriverType type) {
+    this(type, DEFAULT_LOAD_IMG, DEFAULT_RUN_JS);
+  }
 
   public CrawlerConf(SeleniumDriverType type, boolean loadImg, boolean runJs) {
     this(type, DEFAULT_HEADLESS, loadImg, runJs, DEFAULT_IN_SERVER, DEFAULT_CUSTOM_ARGS,
