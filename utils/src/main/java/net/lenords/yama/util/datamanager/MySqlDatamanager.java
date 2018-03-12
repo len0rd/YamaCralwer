@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.net.URISyntaxException;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -58,6 +60,15 @@ public class MySqlDatamanager {
 
   public MySqlDatamanager() {
     this(DEFAULT_MYSQL_CONF_LOCATION);
+  }
+
+  public Connection getConnection() {
+    try {
+      return conn.getConn();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 
   public void insert(String table, Map<String, Object> data) {

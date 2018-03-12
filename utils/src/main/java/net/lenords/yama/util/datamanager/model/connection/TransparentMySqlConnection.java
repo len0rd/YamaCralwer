@@ -29,7 +29,7 @@ public class TransparentMySqlConnection implements TransparentConnection {
     }
 
     this.dataSource = new BasicDataSource();
-    this.dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+    this.dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
     this.dataSource.setUrl("jdbc:mysql://" + mysqlConn.getFullHost());
     this.dataSource.setUsername(mysqlConn.getUser());
     this.dataSource.setPassword(mysqlConn.getPass());

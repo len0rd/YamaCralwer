@@ -1,8 +1,6 @@
 package net.lenords.yama.util.datamanager.model.events;
 
-import net.lenords.yama.model.events.EventListener;
-
-public class DatamanagerEventListener implements EventListener {
+public class DatamanagerEventListener extends EventListener {
 
   @Override
   public String getName() {
@@ -10,7 +8,7 @@ public class DatamanagerEventListener implements EventListener {
   }
 
   @Override
-  public void run() {
+  public void run(Object contextInfo) {
 
   }
 }

@@ -1,4 +1,4 @@
-package net.lenords.yama.model.events;
+package net.lenords.yama.util.datamanager.model.events;
 
 public abstract class EventListener<T> {
 
