@@ -11,10 +11,12 @@ import java.util.Objects;
 public class Schema {
   private String tableName;
   private List<String> columns;
+  private List<ForeignKey> foreignConstraints;
 
   public Schema(String tableName) {
     this.tableName = tableName;
     this.columns = new ArrayList<>();
+    this.foreignConstraints = new ArrayList<>();
   }
 
   public Schema(String tableName, List<String> columns) {

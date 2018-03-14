@@ -16,8 +16,10 @@ public class MySqlDatamanagerTest {
 
     DatabaseMetaData dbmd = dm.getConnection().getMetaData();
 
-    ResultSet tablesRs = dbmd.getTables(null, null, "export_total", new String[]{"TABLE"});
-
+    //ResultSet tablesRs = dbmd.getTables(null, null, "export_total", new String[]{"TABLE"});
+    //ResultSet tablesRs = dbmd.getPrimaryKeys("re_fsbo_front", null, "re_fsbo");
+    ResultSet tablesRs = dbmd.getIndexInfo(null, null, "export_total", true, false);
+    //ResultSet tablesRs = dbmd.getExportedKeys(null, null, "export_total");
 
     if (tablesRs.first()) {
       final int columnCount = tablesRs.getMetaData().getColumnCount();

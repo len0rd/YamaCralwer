@@ -1,7 +1,7 @@
 package net.lenords.yama.model.actions;
 
-public interface Action {
+public interface Action<T> {
 
-  ActionResult performAction();
+  ActionResult performAction(T context);
 
 }
