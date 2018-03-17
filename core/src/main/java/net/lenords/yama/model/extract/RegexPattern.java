@@ -97,8 +97,6 @@ public class RegexPattern {
           }
 
         }
-      } else {
-        System.out.println("Matcher failed");
       }
     }
 
