@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 import net.lenords.yama.crawler.conf.CrawlerConf;
-import net.lenords.yama.model.CrawlerRequest;
+import net.lenords.yama.model.request.CrawlerRequest;
 import net.lenords.yama.proxy.ProxyProvider;
 import net.lenords.yama.util.lang.StrUtils;
 import org.openqa.selenium.By;
@@ -31,12 +31,12 @@ public class SeleniumCrawlerDriver implements CrawlerDriver {
 
   public SeleniumCrawlerDriver(CrawlerConf driverConf) {
     this.config = driverConf;
-    String yamaKurora = "山クローラ"; //Yama Kurōra
+    //String yamaKurora = "山クローラ"; //Yama Kurōra
     initDriver(driverConf, null);
   }
 
   public String requestAndGet(CrawlerRequest request) {
-    driver.get(request.getUrl());
+    driver.get(request.buildUrl());
     return driver.getPageSource();
   }
 
@@ -74,12 +74,15 @@ public class SeleniumCrawlerDriver implements CrawlerDriver {
     }
   }
 
-  public String getInnerHtml(By elementsInnerHtmlToGet) {
-    WebElement el = getFirstElement(elementsInnerHtmlToGet);
-    if (el != null) {
-      return el.getAttribute("innerHTML");
+  public String getInnerHtml(WebElement elementToGetHtmlInnardsOf) {
+    if (elementToGetHtmlInnardsOf != null) {
+      return elementToGetHtmlInnardsOf.getAttribute("innerHTML");
     }
     return null;
+  }
+
+  public String getInnerHtml(By elementsInnerHtmlToGet) {
+    return getInnerHtml(getFirstElement(elementsInnerHtmlToGet));
   }
 
   public String clickAndGet(WebElement clickElement) {
@@ -95,6 +98,7 @@ public class SeleniumCrawlerDriver implements CrawlerDriver {
   public String getElementContents(By subExtractor, WebElement mainElement) {
     try {
       WebElement subElement = mainElement.findElement(subExtractor);
+      subElement.sendKeys();
       return subElement.getText();
     } catch (NoSuchElementException nse) {
       return null;

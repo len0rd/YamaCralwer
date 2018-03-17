@@ -1,7 +1,7 @@
 package net.lenords.yama.model.actions.extract;
 
+import net.lenords.yama.crawler.CrawlerDriver;
 import net.lenords.yama.model.actions.ActionResult;
-import org.openqa.selenium.WebDriver;
 
 public class RegexExtractAction implements ExtractAction {
 
@@ -16,7 +16,7 @@ public class RegexExtractAction implements ExtractAction {
   }
 
   @Override
-  public ActionResult performAction(WebDriver context) {
+  public ActionResult performAction(CrawlerDriver context) {
     return null;
   }
 }

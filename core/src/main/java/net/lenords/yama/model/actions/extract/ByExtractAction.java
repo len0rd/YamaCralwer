@@ -1,6 +1,6 @@
 package net.lenords.yama.model.actions.extract;
 
-import net.lenords.yama.crawler.SeleniumCrawlerDriver;
+import net.lenords.yama.crawler.CrawlerDriver;
 import net.lenords.yama.model.actions.ActionResult;
 
 public class ByExtractAction implements ExtractAction {
@@ -16,7 +16,7 @@ public class ByExtractAction implements ExtractAction {
   }
 
   @Override
-  public ActionResult performAction(SeleniumCrawlerDriver context) {
+  public ActionResult performAction(CrawlerDriver context) {
     return null;
   }
 

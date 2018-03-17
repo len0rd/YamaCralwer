@@ -7,4 +7,7 @@ dependencies {
     //htmlunit selenium driver
     // https://mvnrepository.com/artifact/org.seleniumhq.selenium/htmlunit-driver
     compile group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.29.1'
+
+    //For the string utils class:
+    compile group: 'org.apache.commons', name: 'commons-text', version: '1.2'
 }

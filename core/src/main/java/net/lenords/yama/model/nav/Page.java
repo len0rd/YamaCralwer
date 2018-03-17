@@ -1,7 +1,7 @@
 package net.lenords.yama.model.nav;
 
 import java.util.List;
-import net.lenords.yama.model.CrawlerRequest;
+import net.lenords.yama.model.request.CrawlerRequest;
 import net.lenords.yama.model.actions.extract.ExtractAction;
 
 public class Page {

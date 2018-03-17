@@ -3,8 +3,10 @@ package net.lenords.yama.util.lang;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.text.StringEscapeUtils;
 
 public class StrUtils {
+  public static final String REMOVE_HTML_TAG_REGEX = "<[^<>]*>";
 
   public static String trimToNull(String s) {
     if (s != null) {
@@ -64,5 +66,14 @@ public class StrUtils {
   public static String regexGet(String s, String Regex, boolean caseSensitive) {
     return regexGet(s, Regex, caseSensitive, 0);
   }
+
+  public static String stripHtml(String s) {
+    if (s != null) {
+      s = s.replaceAll(REMOVE_HTML_TAG_REGEX, "");
+      s = StringEscapeUtils.unescapeHtml4(s);
+    }
+    return s;
+  }
+
 
 }
