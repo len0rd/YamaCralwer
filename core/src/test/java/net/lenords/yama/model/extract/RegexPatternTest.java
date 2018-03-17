@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class RegexPatternTest {
 
   @Test
-  void basicPattern() throws Exception {
+  void basicPattern() {
     String matchAgainst = "<h2><a href=\"https://arstechnica.com/gadgets/2018/03/galaxy-s9-review-faster-specs-better-biometrics-in-a-familiar-package/\">Galaxy S9+ review—Faster specs, better biometrics in a familiar package</a></h2>";
 
     RegexPattern pattern = new RegexPattern("basicPattern");
@@ -29,7 +29,7 @@ public class RegexPatternTest {
   }
 
   @Test
-  void usingCommonExtractors() throws Exception {
+  void usingCommonExtractors() {
     String matchAgainstSuccess = "Hello There! General Kenobi! You are a bold one! Here's my "
         + "email: grievous.general@bionic-man.net";
 
@@ -39,7 +39,7 @@ public class RegexPatternTest {
 
     String regex = emailMatcher.build();
 
-    //System.out.println(regex);
+    System.out.println(regex);
 
     Map<String, String> results = emailMatcher.execute(matchAgainstSuccess);
 
@@ -47,6 +47,25 @@ public class RegexPatternTest {
     assert !results.isEmpty();
     Assertions.assertEquals("Kenobi", results.get("name"));
     Assertions.assertEquals("grievous.general@bionic-man.net", results.get("email"));
+
+  }
+
+  @Test
+  void runTidiers() {
+    String matchAgainst = "<h2><a href=\"https://arstechnica.com/gadgets/2018/03/galaxy-s9-review-faster-specs-better-biometrics-in-a-familiar-package/\">  Galaxy S9+ review—Faster specs, better biometrics in a familiar package  </a></h2>";
+
+    RegexPattern tidyTest = new RegexPattern("tidyTest");
+    tidyTest.add("<h2>").add((new Extractor("articleTitle", ".*?")).stripHtml().trim())
+        .add("</h2>");
+
+    String regex = tidyTest.build();
+    System.out.println(regex);
+
+    Map<String, String> results = tidyTest.execute(matchAgainst);
+
+    assert results != null;
+    assert !results.isEmpty();
+    Assertions.assertEquals("Galaxy S9+ review—Faster specs, better biometrics in a familiar package", results.get("articleTitle"));
 
   }
 

@@ -36,7 +36,7 @@ public class Extractor implements Tuple<String, String>  {
    * @return  This, the current extractor
    */
   public Extractor trim() {
-    this.trim = false;
+    this.trim = true;
     return this;
   }
 
@@ -49,10 +49,10 @@ public class Extractor implements Tuple<String, String>  {
     return this;
   }
 
-  public String runTidyers(String extractedValue) {
+  public String runTidiers(String extractedValue) {
     extractedValue = stripHtml ? StrUtils.stripHtml(extractedValue) : extractedValue;
     extractedValue = trim ? StrUtils.trimToNull(extractedValue) : extractedValue;
-    //TODO:Convert entities
+    //TODO:Convert entities. Trim should be last
 
     return extractedValue;
   }

@@ -110,6 +110,8 @@ public class RegexPattern {
           String result = matcher.group(name);
           int extractorIndex = Integer.valueOf(name.substring(1, name.length()));
           String keyName = extractors.get(extractorIndex).getKey();
+          //run tidiers for this extractor, if any:
+          result = extractors.get(extractorIndex).runTidiers(result);
 
 
           if (results.containsKey(keyName)) {
