@@ -11,22 +11,38 @@ import net.lenords.yama.util.lang.StrUtils;
 
 
 /**
+ *  Represents a regular expression pattern, with constant regular expressions as well
+ *  as portions of the expression you want extracted into variables.
+ *  <p>
+ *    Variables you want from the pattern are returned upon a call to the {@link #execute(String)}
+ *    method.
+ *  <p>
+ *    To build a regex to run, make properly ordered calls to the {@link #add(String)}
+ *    and {@link #add(Extractor)} methods.
+ *  <p>
+ *    Example: Build a RegexPattern to match the following:
+ *  <br>
+ *    "&lt;h1&gt;~@fooBar@~&lt;/h1&gt;"
+ *  <br>
+ *    Where '~@fooBar@~' is the variable we want to extract and it has a regex like this: "[^&lt;&gt;]*".
  *
- * ATTN::At present there is no support for normal sub-groupings. If you want to use groupings, but
- * don't want them captured, you need to manually add the non-capturing group specifier.
- * ie: if you only want to capture the outer group of: "(this(is a) regex)" then you would need
- * to add it to this pattern as: "(this(?:is a) regex)"
- * OTHERWISE, the pattern matcher will likely match values incorrectly
+ *    In order to properly build a RegexPattern, you need to sequentially call the 'add' methods like
+ *    so:
+ *  <br>
+ *    pattern.add("&lt;h1&gt;").add(new Extractor("fooBar", "[^&lt;&gt;]*")).add("&lt;/h1&gt;")
+ *  <br>
+ *    Once you've added all the pieces of your extractor in order, call {@link #build()} and then
+ *    {@link #execute(String)} to get a map with fooBar and it's extracted value.
+ *
+ *
  * @author len0rd
  * @since 2018-03-16
  */
 public class RegexPattern {
-  private static final String CONST_REG_NAME = "@@CONST_REGEX_APPEND";
   private List<Extractor> extractors;
   private List<String> extractorNamesToRetrieve;
   private String name;
   private String fullRegex;
-
 
   /**
    *
@@ -38,8 +54,15 @@ public class RegexPattern {
     this.fullRegex = "";
   }
 
+
+  /**
+   * Add constant regex to the full pattern.
+   *
+   * @param regexConst  The regular expression to add.
+   * @return            This, the current RegexPattern
+   */
   public RegexPattern add(String regexConst) {
-    extractors.add(new Extractor(CONST_REG_NAME, regexConst).setType(ExtractorType.NO_GROUP));
+    extractors.add(new Extractor(null, regexConst).setType(ExtractorType.NO_GROUP));
     return this;
   }
 
@@ -88,7 +111,10 @@ public class RegexPattern {
           int extractorIndex = Integer.valueOf(name.substring(1, name.length()));
           String keyName = extractors.get(extractorIndex).getKey();
 
+
           if (results.containsKey(keyName)) {
+            //if our results already contains a key of the same name,
+            //only overwrite the value if this new value is not null/empty
             if (!StrUtils.isNullEmpty(result)) {
               results.put(keyName, result);
             }
@@ -101,6 +127,11 @@ public class RegexPattern {
     }
 
     return results;
+  }
+
+  public Map<String, String> buildAndExecute(String matchAgainst) {
+    build();
+    return buildAndExecute(matchAgainst);
   }
 
   public List<String> getExtractorNamesToRetrieve() {
