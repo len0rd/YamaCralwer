@@ -1,22 +1,25 @@
 package net.lenords.yama.model.actions.extract;
 
-import net.lenords.yama.crawler.CrawlerDriver;
-import net.lenords.yama.model.actions.ActionResult;
+import net.lenords.yama.model.extract.ExtractionPattern;
+import net.lenords.yama.model.extract.ExtractionResult;
+import net.lenords.yama.model.extract.RegexPattern;
 
-public class RegexExtractAction implements ExtractAction {
+public class RegexExtractAction implements ExtractAction<String> {
+  private RegexPattern pattern;
+
 
   @Override
-  public String getExtractorAsString() {
+  public ExtractionPattern getExtractionPattern() {
     return null;
   }
 
   @Override
-  public String getActionResultAsString() {
+  public ExtractionResult getExtractionResult() {
     return null;
   }
 
   @Override
-  public ActionResult performAction(CrawlerDriver context) {
+  public ExtractionResult run(String context) {
     return null;
   }
 }

@@ -1,13 +1,14 @@
 package net.lenords.yama.model.actions.extract;
 
-import net.lenords.yama.crawler.CrawlerDriver;
 import net.lenords.yama.model.actions.Action;
+import net.lenords.yama.model.extract.ExtractionPattern;
+import net.lenords.yama.model.extract.ExtractionResult;
 
-public interface ExtractAction extends Action<CrawlerDriver> {
+public interface ExtractAction<T> extends Action<T, ExtractionResult> {
 
-  String getExtractorAsString();
+  ExtractionPattern getExtractionPattern();
 
-  String getActionResultAsString();
+  ExtractionResult getExtractionResult();
 
 
 }
