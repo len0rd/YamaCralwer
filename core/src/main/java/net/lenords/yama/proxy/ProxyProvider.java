@@ -93,6 +93,21 @@ public class ProxyProvider {
     return proxy;
   }
 
+  public Proxy generateHtmlUnitProxy() {
+    Proxy proxy = new Proxy();
+    proxy.setHttpProxy(getHostName());
+    if (!StrUtils.isNullEmpty(getUsername())) {
+      proxy.setSocksProxy(getHostName());
+      proxy.setSocksUsername(getUsername());
+
+      //we should only have a password if we have a username
+      if (!StrUtils.isNullEmpty(getPassword())) {
+        proxy.setSocksPassword(getPassword());
+      }
+    }
+    return proxy;
+  }
+
   @Override
   public String toString() {
     return "ProxyProvider{" +

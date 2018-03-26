@@ -2,6 +2,8 @@ package net.lenords.yama.crawler;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.BrowserVersion.BrowserVersionBuilder;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +37,7 @@ public class SeleniumCrawlerDriver implements CrawlerDriver {
     initDriver(driverConf, null);
   }
 
+  @Override
   public String requestAndGet(CrawlerRequest request) {
     driver.get(request.buildUrl());
     return driver.getPageSource();
@@ -44,6 +47,27 @@ public class SeleniumCrawlerDriver implements CrawlerDriver {
     driver.navigate().back();
   }
 
+  @Override
+  public String getCurrentURLStr() {
+    return driver.getCurrentUrl();
+  }
+
+  @Override
+  public URL getCurrentURL() {
+    try {
+      return new URL(driver.getCurrentUrl());
+    } catch (MalformedURLException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  @Override
+  public String resolveRelativeToAbsoluteURLStr(String relativeURL) {
+    return null;
+  }
+
+  @Override
   public String getCurrentSource() {
     return driver.getPageSource();
   }
@@ -52,7 +76,13 @@ public class SeleniumCrawlerDriver implements CrawlerDriver {
     switch (config.getDriverType()) {
       case CHROME:
         close();
+        //as far as i know there's no way to change proxy in chrome without restarting the driver
         initDriver(config, newProxy);
+        break;
+      case HTMLUNIT:
+        //with HTMLUnit you can just change the proxy without having to restart the
+        //entire driver!
+        ((HtmlUnitDriver) this.driver).setProxySettings(newProxy.generateHtmlUnitProxy());
         break;
     }
   }
@@ -136,8 +166,10 @@ public class SeleniumCrawlerDriver implements CrawlerDriver {
         if (config.inServerMode()) {
           //if running in server mode, its also headless
           options.addArguments("--headless", "--disable-gpu", "--no-sandbox");
+          options.addArguments("--window-size=1900,1050");
         } else if (config.isHeadless()) {
           options.addArguments("--headless");
+          options.addArguments("--window-size=1900,1050");
         }
 
         if (proxyProvider != null) {
@@ -193,6 +225,10 @@ public class SeleniumCrawlerDriver implements CrawlerDriver {
           this.driver = new HtmlUnitDriver(browserVersion, true);
         } else {
           this.driver = new HtmlUnitDriver(browserVersion);
+        }
+
+        if (proxyProvider != null) {
+          ((HtmlUnitDriver) this.driver).setProxySettings(proxyProvider.generateHtmlUnitProxy());
         }
         break;
     }
