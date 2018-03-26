@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 import net.lenords.yama.model.extract.RegexExtractor.ExtractorType;
 import net.lenords.yama.util.lang.StrUtils;
 
-
 /**
  *  Represents a regular expression pattern, with constant regular expressions as well
  *  as portions of the expression you want extracted into variables.
@@ -109,7 +108,7 @@ public class RegexPattern implements ExtractionPattern<String> {
   }
 
   @Override
-  public List<Map<String, String>> execute(String matchAgainst) {
+  public ExtractionResult execute(String matchAgainst) {
     List<Map<String, String>> results = new ArrayList<>();
 
     if (fullRegex != null && !fullRegex.isEmpty() && matchAgainst != null) {
@@ -141,11 +140,11 @@ public class RegexPattern implements ExtractionPattern<String> {
       }
     }
 
-    return results;
+    return new ExtractionResult(results);
   }
 
   @Override
-  public List<Map<String, String>> buildAndExecute(String matchAgainst) {
+  public ExtractionResult buildAndExecute(String matchAgainst) {
     build();
     return execute(matchAgainst);
   }

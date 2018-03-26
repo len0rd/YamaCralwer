@@ -6,20 +6,37 @@ import net.lenords.yama.model.extract.RegexPattern;
 
 public class RegexExtractAction implements ExtractAction<String> {
   private RegexPattern pattern;
+  private ExtractionResult result;
 
+
+  public RegexExtractAction(RegexPattern pattern) {
+    this.pattern = pattern;
+    this.result = null;
+  }
 
   @Override
   public ExtractionPattern getExtractionPattern() {
-    return null;
+    return pattern;
   }
 
   @Override
   public ExtractionResult getExtractionResult() {
-    return null;
+    return result;
+  }
+
+  @Override
+  public void clearResult() {
+    result = null;
   }
 
   @Override
   public ExtractionResult run(String context) {
-    return null;
+    result = pattern.buildAndExecute(context);
+    return result;
+  }
+
+  @Override
+  public String getName() {
+    return pattern.getName();
   }
 }

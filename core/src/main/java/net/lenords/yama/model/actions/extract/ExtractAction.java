@@ -10,5 +10,7 @@ public interface ExtractAction<T> extends Action<T, ExtractionResult> {
 
   ExtractionResult getExtractionResult();
 
+  void clearResult();
+
 
 }

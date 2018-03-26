@@ -4,4 +4,6 @@ public interface Action<T, R extends ActionResult> {
 
   ActionResult run(T context);
 
+  String getName();
+
 }
