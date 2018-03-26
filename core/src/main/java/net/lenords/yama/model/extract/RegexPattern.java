@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.lenords.yama.model.extract.Extractor.ExtractorType;
+import net.lenords.yama.model.extract.RegexExtractor.ExtractorType;
 import net.lenords.yama.util.lang.StrUtils;
 
 
@@ -18,7 +18,7 @@ import net.lenords.yama.util.lang.StrUtils;
  *    method.
  *  <p>
  *    To build a regex to run, make properly ordered calls to the {@link #add(String)}
- *    and {@link #add(Extractor)} methods.
+ *    and {@link #add(RegexExtractor)} methods.
  *  <p>
  *    Example: Build a RegexPattern to match the following:
  *  <br>
@@ -38,8 +38,8 @@ import net.lenords.yama.util.lang.StrUtils;
  * @author len0rd
  * @since 2018-03-16
  */
-public class RegexPattern {
-  private List<Extractor> extractors;
+public class RegexPattern implements ExtractionPattern<String> {
+  private List<RegexExtractor> extractors;
   private List<String> extractorNamesToRetrieve;
   private String name;
   private String fullRegex;
@@ -54,6 +54,10 @@ public class RegexPattern {
     this.fullRegex = "";
   }
 
+  public RegexPattern() {
+    this("Regex Extractor Pattern");
+  }
+
 
   /**
    * Add constant regex to the full pattern.
@@ -62,16 +66,21 @@ public class RegexPattern {
    * @return            This, the current RegexPattern
    */
   public RegexPattern add(String regexConst) {
-    extractors.add(new Extractor(null, regexConst).setType(ExtractorType.NO_GROUP));
+    extractors.add(new RegexExtractor(null, regexConst).setType(ExtractorType.NO_GROUP));
     return this;
   }
 
-  public RegexPattern add(Extractor regexVar) {
+  public RegexPattern add(RegexExtractor regexVar) {
     extractors.add(regexVar);
     return this;
   }
 
-  public List<Extractor> getExtractors() {
+  public RegexPattern add(String variableName, String variableRegex) {
+    extractors.add(new RegexExtractor(variableName, variableRegex));
+    return this;
+  }
+
+  public List<RegexExtractor> getExtractors() {
     return extractors;
   }
 
@@ -81,7 +90,7 @@ public class RegexPattern {
 
     final int extractorsSize = extractors.size();
     for (int i = 0; i < extractorsSize; i++) {
-      Extractor extractor = extractors.get(i);
+      RegexExtractor extractor = extractors.get(i);
 
       if (extractor.getType() == ExtractorType.NO_GROUP) {
         //then we dont need to make a special group for this
@@ -99,13 +108,16 @@ public class RegexPattern {
     return fullRegex;
   }
 
-  public Map<String, String> execute(String matchAgainst) {
-    Map<String, String>  results = new HashMap<>();
+  @Override
+  public List<Map<String, String>> execute(String matchAgainst) {
+    List<Map<String, String>> results = new ArrayList<>();
 
-    if (fullRegex != null && !fullRegex.isEmpty()) {
+    if (fullRegex != null && !fullRegex.isEmpty() && matchAgainst != null) {
       Pattern pattern = Pattern.compile(fullRegex);
       Matcher matcher = pattern.matcher(matchAgainst);
-      if (matcher.find()) {
+      while (matcher.find()) {
+        Map<String, String>  singleMatch = new HashMap<>();
+
         for (String name : extractorNamesToRetrieve) {
           String result = matcher.group(name);
           int extractorIndex = Integer.valueOf(name.substring(1, name.length()));
@@ -114,28 +126,31 @@ public class RegexPattern {
           result = extractors.get(extractorIndex).runTidiers(result);
 
 
-          if (results.containsKey(keyName)) {
+          if (singleMatch.containsKey(keyName)) {
             //if our results already contains a key of the same name,
             //only overwrite the value if this new value is not null/empty
             if (!StrUtils.isNullEmpty(result)) {
-              results.put(keyName, result);
+              singleMatch.put(keyName, result);
             }
           } else {
-            results.put(keyName, result);
+            singleMatch.put(keyName, result);
           }
 
         }
+        results.add(singleMatch);
       }
     }
 
     return results;
   }
 
-  public Map<String, String> buildAndExecute(String matchAgainst) {
+  @Override
+  public List<Map<String, String>> buildAndExecute(String matchAgainst) {
     build();
-    return buildAndExecute(matchAgainst);
+    return execute(matchAgainst);
   }
 
+  @Override
   public List<String> getExtractorNamesToRetrieve() {
     return extractorNamesToRetrieve;
   }
@@ -144,6 +159,7 @@ public class RegexPattern {
     return fullRegex;
   }
 
+  @Override
   public String getName() {
     return name;
   }
