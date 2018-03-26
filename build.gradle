@@ -3,8 +3,7 @@ subprojects {
     version '0.0.1-SNAPSHOT'
     apply plugin: 'java'
 
-    sourceCompatibility = 1.9
-
+    sourceCompatibility = 1.8
     repositories {
         mavenCentral()
         flatDir {
@@ -22,4 +21,6 @@ subprojects {
         testCompile('org.junit.jupiter:junit-jupiter-api:5.1.0')
         testRuntime('org.junit.jupiter:junit-jupiter-engine:5.1.0')
     }
+
+
 }
