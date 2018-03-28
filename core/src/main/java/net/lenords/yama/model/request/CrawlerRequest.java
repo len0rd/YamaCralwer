@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -83,5 +84,36 @@ public class CrawlerRequest {
     } catch (UnsupportedEncodingException e) {
       return param.getKey() + "=" + param.getValue();
     }
+  }
+
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    CrawlerRequest that = (CrawlerRequest) o;
+    return requestTimeout == that.requestTimeout &&
+        Objects.equals(url, that.url) &&
+        Objects.equals(params, that.params) &&
+        Objects.equals(encoding, that.encoding);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(url, requestTimeout, params, encoding);
+  }
+
+  @Override
+  public String toString() {
+    return "CrawlerRequest{" +
+        "url='" + url + '\'' +
+        ", requestTimeout=" + requestTimeout +
+        ", params=" + params +
+        ", encoding='" + encoding + '\'' +
+        '}';
   }
 }

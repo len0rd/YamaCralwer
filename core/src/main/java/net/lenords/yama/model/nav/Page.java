@@ -22,6 +22,7 @@ public class Page {
   private String name, currentURL;
   private final String baseURL;
   private String rawHtml;
+  private boolean redirectDetected;
   //the original request sent to the driver to process.
   private CrawlerRequest originalRequest;
   //created after the request is executed by the driver. Having the two requests
@@ -46,14 +47,16 @@ public class Page {
    */
   public Map<String, String> run(CrawlerDriver cd) {
     //reset some the stuff that changes on each load
-    extractors.forEach(ExtractAction::clearResult);
+    extractors.parallelStream().forEach(ExtractAction::clearResult);
     this.currentURL = null;
     this.rawHtml = cd.requestAndGet(originalRequest);
 
     runAllExtractors(cd);
     Map<String, String> lastResultsOfAllExtractors = new HashMap<>();
-    extractors.forEach(extractAction -> lastResultsOfAllExtractors.putAll(extractAction.getExtractionResult().getLastResult()));
+    extractors.forEach(extractAction -> lastResultsOfAllExtractors.putAll(extractAction.getExtractionResult().getLast()));
 
+
+    //redirectDetected = originalRequest.equals()
     //reset orig request now that we're done
     this.originalRequest = new CrawlerRequest(baseURL);
     return lastResultsOfAllExtractors;
@@ -65,6 +68,10 @@ public class Page {
     originalRequest.setBaseUrl(currentUrl);
   }
 
+  public CrawlerRequest getRequest() {
+    return originalRequest;
+  }
+
   /**
    * Runs all ExtractActions associated with this page. This is automatically called by
    * the {@link #run(CrawlerDriver)} method. NO NEED to call manually unless you've manually
@@ -73,10 +80,20 @@ public class Page {
    */
   public void runAllExtractors(CrawlerDriver cd) {
     //Run all extractors
+    //these need to be run in order, otherwise this
+    //couldve been done in parallell streams
+    for (ExtractAction extractor : extractors) {
+      if (extractor instanceof RegexExtractAction) {
+        ((RegexExtractAction)extractor).run(rawHtml);
+      } else if (extractor instanceof ByExtractAction) {
+        ((ByExtractAction)extractor).run(cd);
+      }
+    }
+    /*
     extractors.stream().filter(extractAction -> extractAction instanceof RegexExtractAction)
         .forEach(regexAction -> ((RegexExtractAction)regexAction).run(rawHtml));
     extractors.stream().filter(extractAction -> extractAction instanceof ByExtractAction)
-        .forEach(byAction -> ((ByExtractAction)byAction).run(cd));
+        .forEach(byAction -> ((ByExtractAction)byAction).run(cd));*/
 
   }
 

@@ -1,7 +1,5 @@
 package net.lenords.yama.model.extract;
 
-import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -18,14 +16,14 @@ public class RegexPatternTest {
     pattern.build();
 
 
-    List<Map<String, String>> results = pattern.execute(matchAgainst);
+    ExtractionResult results = pattern.execute(matchAgainst);
 
     System.out.println(pattern.getGeneratedRegex());
 
     assert results != null;
-    assert !results.isEmpty();
-    Assertions.assertEquals("https://arstechnica.com/gadgets/2018/03/galaxy-s9-review-faster-specs-better-biometrics-in-a-familiar-package/", results.get(0).get("link"));
-    Assertions.assertEquals("Galaxy S9+ review—Faster specs, better biometrics in a familiar package", results.get(0).get("name"));
+    assert !results.getResult().isEmpty();
+    Assertions.assertEquals("https://arstechnica.com/gadgets/2018/03/galaxy-s9-review-faster-specs-better-biometrics-in-a-familiar-package/", results.getFirst().get("link"));
+    Assertions.assertEquals("Galaxy S9+ review—Faster specs, better biometrics in a familiar package", results.getFirst().get("name"));
 
   }
 
@@ -42,12 +40,12 @@ public class RegexPatternTest {
 
     System.out.println(regex);
 
-    List<Map<String, String>> results = emailMatcher.execute(matchAgainstSuccess);
+    ExtractionResult results = emailMatcher.execute(matchAgainstSuccess);
 
     assert results != null;
-    assert !results.isEmpty();
-    Assertions.assertEquals("Kenobi", results.get(0).get("name"));
-    Assertions.assertEquals("grievous.general@bionic-man.net", results.get(0).get("email"));
+    assert !results.getResult().isEmpty();
+    Assertions.assertEquals("Kenobi", results.getFirst().get("name"));
+    Assertions.assertEquals("grievous.general@bionic-man.net", results.getFirst().get("email"));
 
   }
 
@@ -62,11 +60,11 @@ public class RegexPatternTest {
     String regex = tidyTest.build();
     System.out.println(regex);
 
-    List<Map<String, String>> results = tidyTest.execute(matchAgainst);
+    ExtractionResult results = tidyTest.execute(matchAgainst);
 
     assert results != null;
-    assert !results.isEmpty();
-    Assertions.assertEquals("Galaxy S9+ review—Faster specs, better biometrics in a familiar package", results.get(0).get("articleTitle"));
+    assert !results.getResult().isEmpty();
+    Assertions.assertEquals("Galaxy S9+ review—Faster specs, better biometrics in a familiar package", results.getFirst().get("articleTitle"));
 
   }
 

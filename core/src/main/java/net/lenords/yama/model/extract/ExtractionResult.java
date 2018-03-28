@@ -21,11 +21,11 @@ public class ExtractionResult implements ActionResult<List<Map<String, String>>>
     return result;
   }
 
-  public Map<String, String> getFirstResult() {
+  public Map<String, String> getFirst() {
     return result != null && !result.isEmpty() ? result.get(0) : null;
   }
 
-  public Map<String, String> getLastResult() {
+  public Map<String, String> getLast() {
     return result != null && !result.isEmpty() ? result.get(result.size()-1) : null;
   }
 }

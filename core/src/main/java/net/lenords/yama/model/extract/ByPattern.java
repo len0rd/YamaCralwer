@@ -14,12 +14,17 @@ import net.lenords.yama.crawler.SeleniumCrawlerDriver;
 public class ByPattern implements ExtractionPattern<SeleniumCrawlerDriver> {
 
   @Override
-  public List<Map<String, String>> buildAndExecute(SeleniumCrawlerDriver matchAgainst) {
+  public SeleniumCrawlerDriver build() {
     return null;
   }
 
   @Override
-  public List<Map<String, String>> execute(SeleniumCrawlerDriver matchAgainst) {
+  public ExtractionResult buildAndExecute(SeleniumCrawlerDriver matchAgainst) {
+    return null;
+  }
+
+  @Override
+  public ExtractionResult execute(SeleniumCrawlerDriver matchAgainst) {
     return null;
   }
 
