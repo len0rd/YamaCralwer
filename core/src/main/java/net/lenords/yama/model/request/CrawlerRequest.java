@@ -19,8 +19,8 @@ public class CrawlerRequest {
   private int requestTimeout;
   private List<HttpParam> params;
   private String encoding;
-
   //private List<> cookies
+
   public CrawlerRequest(String url) {
     this.url = url;
     this.requestTimeout = -1;
@@ -28,10 +28,17 @@ public class CrawlerRequest {
     this.encoding = "UTF-8";
   }
 
+  public CrawlerRequest(CrawlerRequest requestToCopy) {
+    this.url = requestToCopy.getBaseUrl();
+    this.requestTimeout = requestToCopy.getRequestTimeout();
+    this.params = requestToCopy.getGetParams();
+    this.encoding = requestToCopy.getEncoding();
+  }
+
   public String buildUrl() {
     StringBuilder fullURL = new StringBuilder(url);
     if (!params.isEmpty()) {
-      if (fullURL.charAt(fullURL.length()-1) != '?') {
+      if (fullURL.indexOf("?") < 0) {
         fullURL.append('?');
       }
 
@@ -74,8 +81,30 @@ public class CrawlerRequest {
     this.encoding = encoding;
   }
 
+  public String getEncoding() {
+    return encoding;
+  }
+
+  public List<HttpParam> getGetParams() {
+    return params;
+  }
+
   public void setRequestTimeout(int requestTimeout) {
     this.requestTimeout = requestTimeout;
+  }
+
+  public boolean hasTokens() {
+    return url.matches(".*~#.+?#~.*") || paramsHaveTokens();
+  }
+
+  private boolean paramsHaveTokens() {
+    for (HttpParam param : params) {
+      if (param.getKey().matches(".*~#.+?#~.*") ||
+          param.getValue().matches(".*~#.+?#~.*")) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private String encodeParam(HttpParam param) {
@@ -85,7 +114,6 @@ public class CrawlerRequest {
       return param.getKey() + "=" + param.getValue();
     }
   }
-
 
   @Override
   public boolean equals(Object o) {

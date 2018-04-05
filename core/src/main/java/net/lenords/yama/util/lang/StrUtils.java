@@ -21,6 +21,10 @@ public class StrUtils {
            s.trim().isEmpty();
   }
 
+  public static boolean isNullEmpty(Object o) {
+    return o == null || (o instanceof String && ((String) o).trim().isEmpty());
+  }
+
   public static String pretty(String toPretty, List<String> regexRemoveFromStr) {
     toPretty = trimToNull(toPretty);
     if (!isNullEmpty(toPretty) && regexRemoveFromStr != null ) {

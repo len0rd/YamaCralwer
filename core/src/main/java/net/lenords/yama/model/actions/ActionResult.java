@@ -6,4 +6,6 @@ public interface ActionResult<T> {
 
   T getResult();
 
+  boolean isEmpty();
+
 }

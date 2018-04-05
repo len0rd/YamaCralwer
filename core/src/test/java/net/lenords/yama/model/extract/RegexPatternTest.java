@@ -68,4 +68,15 @@ public class RegexPatternTest {
 
   }
 
+  @Test
+  void weirdRegex() {
+    String matchAgainst = "><div id=\\\"home-description-fav-note\\\" class=\\\"hide zsg-content-component zsg-annotation-area prop-mod prop-notes\\\"><h4>My Notes<\\/h4><span id=\\\"fav-note-text\\\" class=\\\"prop-mod-bd\\\" data-zpid=\\\"2106124789\\\"><\\/span><span class=\\\"prop-notes-edit edit-note\\\"><a id=\\\"edit-note-btn\\\" class=\\\"show-lightbox\\\" href=\\\"#add-note-code\\\"> Edit<\\/a><\\/span><\\/div><\\/div><div class=\\\"zsg-lg-2-3 zsg-md-1-1 hdp-header-description\\\"><div class=\\\"zsg-content-component\\\"><div class=\\\"notranslate zsg-content-item\\\">JUST RENOVATED 3 bedroom in Golden Hill! Features an open floor plan, Air Conditioning and heat, spacious living room, hardwood floors throughout, renovated kitchen with granite counter tops, stainless steel appliances, large bedrooms and washer and dryer IN UNIT!! This is one home you do not want to miss! <br\\/>Close to Balboa Park, South Park and Downtown! Complex is gated with friendly neighbors and lots of street parking. Walk to Golden Hill farmers market every Saturday! Great restaurants and shops nearby, convenient freeway access.<br\\/>Rent is $2,500 per month with a security deposit of $2,500. Water &amp; Trash is included. SDG&amp;E is tenants responsibility. Cats allowed with a $500 deposit. No dogs allowed.<\\/div><\\/div><\\/div><div id=\\\"fios-scroll-tracker\\\"><\\/div><div class=\\\"hdp-facts zsg-content-component z-moreless\\\"><div class=\\\"hdp-facts-expandable-container clear\\\"><p class=\\\"hdp-fact-category-title\\\">Facts and Features<\\/p><div class=\\\"zsg-g zsg-g_gutterless\\\"><div class=\\\"zsg-lg-1-3 zsg-md-1-2\\\"><div class=\\\"hdp-fact-ataglance-container zsg-media\\\"><div class=\\\"zsg-media-img\\\"><span class=\\\"hdp-fact-ataglance-icon zsg-icon-buildings\\\"><\\/span><\\/div><div class=\\\"zsg-media-bd\\\"><p class=\\\"hdp-fact-ataglance-heading\\\">Type<\\/p><div class=\\\"hdp-fact-ataglance-value\\\">Apartment<\\/div><\\/div><";
+
+    RegexPattern desc = new RegexPattern("Description").add("<div class=\\\\\\\"notranslate zsg-content-item\\\\\\\">").add("Description_Ad", ".*?").add("<\\\\\\/div>");
+
+    ExtractionResult result = desc.buildAndExecute(matchAgainst);
+    assert !result.isEmpty();
+    System.out.println(result.getFirst().get("Description_Ad"));
+  }
+
 }

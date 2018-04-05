@@ -119,20 +119,22 @@ public class RegexPattern implements ExtractionPattern<String> {
 
         for (String name : extractorNamesToRetrieve) {
           String result = matcher.group(name);
-          int extractorIndex = Integer.valueOf(name.substring(1, name.length()));
-          String keyName = extractors.get(extractorIndex).getKey();
-          //run tidiers for this extractor, if any:
-          result = extractors.get(extractorIndex).runTidiers(result);
+          if (!StrUtils.isNullEmpty(result)) {
+            int extractorIndex = Integer.valueOf(name.substring(1, name.length()));
+            String keyName = extractors.get(extractorIndex).getKey();
+            //run tidiers for this extractor, if any:
+            singleMatch.putAll( extractors.get(extractorIndex).runTidiersAndSubextractors(result));
 
 
-          if (singleMatch.containsKey(keyName)) {
-            //if our results already contains a key of the same name,
-            //only overwrite the value if this new value is not null/empty
-            if (!StrUtils.isNullEmpty(result)) {
+            if (singleMatch.containsKey(keyName)) {
+              //if our results already contains a key of the same name,
+              //only overwrite the value if this new value is not null/empty
+              if (!StrUtils.isNullEmpty(result)) {
+                singleMatch.put(keyName, result);
+              }
+            } else {
               singleMatch.put(keyName, result);
             }
-          } else {
-            singleMatch.put(keyName, result);
           }
 
         }
