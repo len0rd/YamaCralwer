@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.lenords.yama.crawler.CrawlerDriver;
@@ -15,6 +13,7 @@ import net.lenords.yama.model.actions.extract.RegexExtractAction;
 import net.lenords.yama.model.extract.RegexPattern;
 import net.lenords.yama.model.request.CrawlerRequest;
 import net.lenords.yama.model.actions.extract.ExtractAction;
+import net.lenords.yama.model.request.HttpParam;
 
 /**
  * Represents a page structure to crawl
@@ -115,19 +114,33 @@ public class Page {
     //TODO: do we need deep copy/clone here? possibly for the http param list
     lastBuiltRequest = new CrawlerRequest(baseRequest);
     if (lastBuiltRequest.hasTokens()) {
-      String baseURL = lastBuiltRequest.getBaseUrl();
-      Matcher urlMatcher = tokenPattern.matcher(baseURL);
-      while (urlMatcher.find()) {
-        String keyname = urlMatcher.group(1);
-        if (context.containsKey(keyname)) {
-          baseURL = baseURL.replace("~#" + keyname + "#~", context.get(keyname));
+      lastBuiltRequest.setBaseUrl(replaceTokensInString(context, lastBuiltRequest.getBaseUrl()));
+
+      if (lastBuiltRequest.hasTokens()) { //if the request still has tokens
+
+        //then we need to replace all tokens in key value pairs:
+        for (HttpParam param : lastBuiltRequest.getGetParams()) {
+          if (param.getKey().matches(".*~#.+?#~.*") ) {
+            param.setKey(replaceTokensInString(context, param.getKey()));
+          }
+          if (param.getValue().matches(".*~#.+?#~.*")) {
+            param.setValue(replaceTokensInString(context, param.getValue()));
+          }
         }
-      }
-      lastBuiltRequest.setBaseUrl(baseURL);
-      if (lastBuiltRequest.hasTokens()) {
-        //TODO http param token replacement
+
       }
     }
+  }
+
+  private String replaceTokensInString(Map<String, String> context, String replaceIn) {
+    Matcher tokenMatcher = tokenPattern.matcher(replaceIn);
+    while (tokenMatcher.find()) {
+      String keyName = tokenMatcher.group(1);
+      if (context.containsKey(keyName)) {
+        replaceIn = replaceIn.replace("~#" + keyName + "#~", context.get(keyName));
+      }
+    }
+    return replaceIn;
   }
 
   public String getRawHtml() {
