@@ -1,5 +1,6 @@
 package net.lenords.yama.model.nav;
 
+import java.util.HashMap;
 import java.util.Map;
 import net.lenords.yama.crawler.SeleniumCrawlerDriver;
 import net.lenords.yama.crawler.conf.CrawlerConf;
@@ -43,10 +44,17 @@ public class PageTest {
   void replaceVarInBaseURL() {
     Page testPage = new Page("PageTest", "https://www.zillow.com/jsonp/Hdp.htm?zpid=~#ID#~&fad=false&hc=false&lhdp=true&callback=YUI.Env.JSONP");
 
-    testPage.replaceInBaseURL("ID", "2090417095");
+    Map<String, String> testContext = new HashMap<>();
+    testContext.put("ID", "2090417095");
+
+    testPage.findReplaceTokens(testContext);
+
+
 
     Assertions.assertEquals("https://www.zillow.com/jsonp/Hdp.htm?zpid=2090417095&fad=false&hc=false&lhdp=true&callback=YUI.Env.JSONP",
-        testPage.getRequest().getBaseUrl(), "Failed to replace variable in page's base url");
+        testPage.getBuiltRequest().getBaseUrl(), "Failed to replace variable in page's base url");
+    Assertions.assertEquals("https://www.zillow.com/jsonp/Hdp.htm?zpid=~#ID#~&fad=false&hc=false&lhdp=true&callback=YUI.Env.JSONP",
+        testPage.getBaseRequest().getBaseUrl(), "Base request was modified when it shouldn't have been");
   }
 
   @Test
@@ -73,8 +81,10 @@ public class PageTest {
     RegexPattern lot  = new RegexPattern("Lot").add("Lot:").add("Lot_Size", ".*?").add("acres<\\/li>");
 
     testPage.addExtractorPatterns(desc, sqft, bath, beds, prop, year, cost, cp1, lot);
-    testPage.replaceInBaseURL("ID", "2090417095");
-    Map<String, String> result = testPage.run(cd);
+
+    Map<String, String> testContext = new HashMap<>();
+    testContext.put("ID", "2090417095");
+    Map<String, String> result = testPage.run(testContext, cd);
     assert result != null;
     assert !result.isEmpty();
 
