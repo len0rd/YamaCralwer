@@ -14,6 +14,7 @@ import net.lenords.yama.model.request.CrawlerRequest;
 import net.lenords.yama.proxy.ProxyProvider;
 import net.lenords.yama.util.lang.StrUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -33,7 +34,7 @@ public class SeleniumCrawlerDriver implements CrawlerDriver {
 
   public SeleniumCrawlerDriver(CrawlerConf driverConf) {
     this.config = driverConf;
-    //String yamaKurora = "山クローラ"; //Yama Kurōra
+    // String yamaKurora = "山クローラ"; //Yama Kurōra
     initDriver(driverConf, null);
   }
 
@@ -76,19 +77,19 @@ public class SeleniumCrawlerDriver implements CrawlerDriver {
     switch (config.getDriverType()) {
       case CHROME:
         close();
-        //as far as i know there's no way to change proxy in chrome without restarting the driver
+        // as far as i know there's no way to change proxy in chrome without restarting the driver
         initDriver(config, newProxy);
         break;
       case HTMLUNIT:
-        //with HTMLUnit you can just change the proxy without having to restart the
-        //entire driver!
+        // with HTMLUnit you can just change the proxy without having to restart the
+        // entire driver!
         ((HtmlUnitDriver) this.driver).setProxySettings(newProxy.generateHtmlUnitProxy());
         break;
     }
   }
 
   public String clickAndGetFirst(By clickBy) {
-    try  {
+    try {
       WebElement firstElement = driver.findElement(clickBy);
       return clickAndGet(firstElement);
     } catch (NoSuchElementException nse) {
@@ -97,7 +98,7 @@ public class SeleniumCrawlerDriver implements CrawlerDriver {
   }
 
   public WebElement getFirstElement(By getBy) {
-    try  {
+    try {
       return driver.findElement(getBy);
     } catch (NoSuchElementException nse) {
       return null;
@@ -151,20 +152,33 @@ public class SeleniumCrawlerDriver implements CrawlerDriver {
     return config;
   }
 
+  public WebDriver getDriver() {
+    return driver;
+  }
+
   public void close() {
     if (driver != null) {
-      driver.quit();
+      try {
+        driver.close();
+        if (driver != null) {
+          driver.quit();
+        }
+      } catch (SessionNotCreatedException snce) {
+        System.out.println("Tried to close a driver that was already closed");
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
   }
 
   private void initDriver(CrawlerConf config, ProxyProvider proxyProvider) {
     switch (config.getDriverType()) {
-      case CHROME: //Properly configure the chrome driver:
+      case CHROME: // Properly configure the chrome driver:
         Map<String, Object> additonalPrefs = new HashMap<>();
         ChromeOptions options = new ChromeOptions();
 
         if (config.inServerMode()) {
-          //if running in server mode, its also headless
+          // if running in server mode, its also headless
           options.addArguments("--headless", "--disable-gpu", "--no-sandbox");
           options.addArguments("--window-size=1900,1050");
         } else if (config.isHeadless()) {
@@ -191,7 +205,7 @@ public class SeleniumCrawlerDriver implements CrawlerDriver {
         this.driver = new ChromeDriver(options);
         break;
 
-      case FIREFOX: //Properly  configure the firefox driver:
+      case FIREFOX: // Properly  configure the firefox driver:
         FirefoxOptions ffOptions = new FirefoxOptions();
 
         if (config.isHeadless() || config.inServerMode()) {
@@ -211,12 +225,13 @@ public class SeleniumCrawlerDriver implements CrawlerDriver {
         this.driver = new FirefoxDriver(ffOptions);
         break;
 
-      case HTMLUNIT: //Properly configure HtmlUnit driver:
+      case HTMLUNIT: // Properly configure HtmlUnit driver:
         BrowserVersion browserVersion = BrowserVersion.getDefault();
-        //since htmlunit is already headless, this cuts down on the number of config options
-        //this constructor needs to deal with
+        // since htmlunit is already headless, this cuts down on the number of config options
+        // this constructor needs to deal with
         if (!StrUtils.isNullEmpty(config.getUserAgent())) {
-          BrowserVersion.BrowserVersionBuilder builder = new BrowserVersionBuilder(BrowserVersion.BEST_SUPPORTED);
+          BrowserVersion.BrowserVersionBuilder builder =
+              new BrowserVersionBuilder(BrowserVersion.BEST_SUPPORTED);
           builder.setUserAgent(config.getUserAgent());
           browserVersion = builder.build();
         }
@@ -233,12 +248,9 @@ public class SeleniumCrawlerDriver implements CrawlerDriver {
         break;
     }
 
-    //if you dont want a load timeout, set the prop to < 0
+    // if you dont want a load timeout, set the prop to < 0
     if (config.getPageLoadTimeout() > 0) {
       driver.manage().timeouts().pageLoadTimeout(config.getPageLoadTimeout(), TimeUnit.SECONDS);
     }
-
   }
-
-
 }
