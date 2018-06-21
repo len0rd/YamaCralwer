@@ -1,9 +1,9 @@
 package net.lenords.yama.crawler;
 
+import net.lenords.yama.api.proxy.ProxyProvider;
 import net.lenords.yama.crawler.conf.CrawlerConf;
 import net.lenords.yama.crawler.conf.SeleniumDriverType;
 import net.lenords.yama.model.request.CrawlerRequest;
-import net.lenords.yama.proxy.ProxyProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +20,6 @@ public class SeleniumCrawlerDriverTest {
     } else {
       Assertions.fail("Driver type unknown. Unable to check for successful instantiation");
     }
-
   }
 
   @org.junit.jupiter.api.Test
@@ -53,8 +52,8 @@ public class SeleniumCrawlerDriverTest {
   @org.junit.jupiter.api.Test
   void basicInstantiationDebugMode_Chrome() {
     System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
-    CrawlerConf conf = new CrawlerConf(SeleniumDriverType.CHROME, false, true,
-        true, false, null, null, 30);
+    CrawlerConf conf =
+        new CrawlerConf(SeleniumDriverType.CHROME, false, true, true, false, null, null, 30);
     SeleniumCrawlerDriver cd1 = new SeleniumCrawlerDriver(conf);
     assertSuccessfulInstantiation(SeleniumDriverType.CHROME, cd1);
     cd1.close();
@@ -63,8 +62,8 @@ public class SeleniumCrawlerDriverTest {
   @org.junit.jupiter.api.Test
   void basicInstantiationDebugMode_Firefox() {
     System.setProperty("webdriver.gecko.driver", "/usr/local/bin/geckodriver");
-    CrawlerConf conf = new CrawlerConf(SeleniumDriverType.FIREFOX, false, true,
-        true, false, null, null, 30);
+    CrawlerConf conf =
+        new CrawlerConf(SeleniumDriverType.FIREFOX, false, true, true, false, null, null, 30);
     SeleniumCrawlerDriver cd1 = new SeleniumCrawlerDriver(conf);
     assertSuccessfulInstantiation(SeleniumDriverType.FIREFOX, cd1);
     cd1.requestAndGet(new CrawlerRequest("https://www.google.com"));
@@ -73,10 +72,12 @@ public class SeleniumCrawlerDriverTest {
 
   @Test
   void usesProxy_HtmlUnit() {
-    CrawlerConf conf = new CrawlerConf(SeleniumDriverType.HTMLUNIT, false, false, false, false, null, null, -1);
+    CrawlerConf conf =
+        new CrawlerConf(SeleniumDriverType.HTMLUNIT, false, false, false, false, null, null, -1);
     ProxyProvider provider = new ProxyProvider("storm", "95.211.175.167", null, null, 1, 13150);
-    //ProxyProvider provider = new ProxyProvider("storm", "163.172.48.109", null, null, 1, 15005);
-    //ProxyProvider provider = new ProxyProvider("microleaves", "62.210.85.27", "datalaboratory", "VgJvWLS6yppxNG76", 1, 10616);
+    // ProxyProvider provider = new ProxyProvider("storm", "163.172.48.109", null, null, 1, 15005);
+    // ProxyProvider provider = new ProxyProvider("microleaves", "62.210.85.27", "datalaboratory",
+    // "VgJvWLS6yppxNG76", 1, 10616);
     SeleniumCrawlerDriver cd1 = new SeleniumCrawlerDriver(conf, provider);
     assertSuccessfulInstantiation(SeleniumDriverType.HTMLUNIT, cd1);
     System.out.println("Initialized, requesting");
@@ -89,9 +90,12 @@ public class SeleniumCrawlerDriverTest {
   @Test
   void usesProxy_Chrome() {
     System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
-    CrawlerConf conf = new CrawlerConf(SeleniumDriverType.CHROME, false, false, false, false, null, null, -1);
-    //ProxyProvider provider = new ProxyProvider("storm", "95.211.175.167", null, null, 1, 13150);
-    ProxyProvider provider = new ProxyProvider("microleaves", "62.210.85.27", "datalaboratory", "VgJvWLS6yppxNG76", 1, 10616);
+    CrawlerConf conf =
+        new CrawlerConf(SeleniumDriverType.CHROME, false, false, false, false, null, null, -1);
+    // ProxyProvider provider = new ProxyProvider("storm", "95.211.175.167", null, null, 1, 13150);
+    ProxyProvider provider =
+        new ProxyProvider(
+            "microleaves", "62.210.85.27", "datalaboratory", "VgJvWLS6yppxNG76", 1, 10616);
     SeleniumCrawlerDriver cd1 = new SeleniumCrawlerDriver(conf, provider);
     assertSuccessfulInstantiation(SeleniumDriverType.CHROME, cd1);
     System.out.println("Initialized, requesting");
@@ -106,6 +110,4 @@ public class SeleniumCrawlerDriverTest {
 
     cd1.close();
   }
-
-
 }

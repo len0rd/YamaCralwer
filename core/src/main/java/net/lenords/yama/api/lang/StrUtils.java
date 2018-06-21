@@ -1,4 +1,4 @@
-package net.lenords.yama.util.lang;
+package net.lenords.yama.api.lang;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -17,8 +17,7 @@ public class StrUtils {
   }
 
   public static boolean isNullEmpty(String s) {
-    return s == null ||
-           s.trim().isEmpty();
+    return s == null || s.trim().isEmpty();
   }
 
   public static boolean isNullEmpty(Object o) {
@@ -27,7 +26,7 @@ public class StrUtils {
 
   public static String pretty(String toPretty, List<String> regexRemoveFromStr) {
     toPretty = trimToNull(toPretty);
-    if (!isNullEmpty(toPretty) && regexRemoveFromStr != null ) {
+    if (!isNullEmpty(toPretty) && regexRemoveFromStr != null) {
       for (String remove : regexRemoveFromStr) {
         toPretty = toPretty.replaceAll(remove, "");
       }
@@ -42,8 +41,7 @@ public class StrUtils {
    * @param s String to be tested
    * @param Regex String of regular expression to be applied to 's'
    * @param caseSensitive Whether the pattern should be case-sensitive(true) or not
-   * @param retGroup Integer of the match group from the regular expression to return (default is
-   * 0)
+   * @param retGroup Integer of the match group from the regular expression to return (default is 0)
    * @return String of the match, if any, null otherwise
    */
   public static String regexGet(String s, String Regex, boolean caseSensitive, int retGroup) {
@@ -78,6 +76,4 @@ public class StrUtils {
     }
     return s;
   }
-
-
 }

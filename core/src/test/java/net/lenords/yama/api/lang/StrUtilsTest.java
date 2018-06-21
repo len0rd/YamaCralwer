@@ -1,7 +1,5 @@
-package net.lenords.yama.util.lang;
+package net.lenords.yama.api.lang;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import org.junit.jupiter.api.Test;
 
 public class StrUtilsTest {
@@ -10,7 +8,5 @@ public class StrUtilsTest {
   void regexGet() throws Exception {
     String regex = "<([^>]*)>";
     String testString;
-
   }
-
 }

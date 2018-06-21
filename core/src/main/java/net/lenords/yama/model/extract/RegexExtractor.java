@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.lenords.yama.api.lang.StrUtils;
 import net.lenords.yama.model.Tuple;
-import net.lenords.yama.util.lang.StrUtils;
 import org.apache.commons.text.StringEscapeUtils;
 
 public class RegexExtractor implements Tuple<String, String> {

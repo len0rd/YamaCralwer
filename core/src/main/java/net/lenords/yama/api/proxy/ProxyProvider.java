@@ -1,7 +1,7 @@
-package net.lenords.yama.proxy;
+package net.lenords.yama.api.proxy;
 
 import java.util.Objects;
-import net.lenords.yama.util.lang.StrUtils;
+import net.lenords.yama.api.lang.StrUtils;
 import org.openqa.selenium.Proxy;
 
 public class ProxyProvider {
@@ -11,8 +11,8 @@ public class ProxyProvider {
   private String service_name, host, username, password;
   private int id, port;
 
-  public ProxyProvider(String service_name, String host, String username, String password, int id,
-      int port) {
+  public ProxyProvider(
+      String service_name, String host, String username, String password, int id, int port) {
     this.service_name = service_name;
     this.host = host;
     this.username = username;
@@ -85,7 +85,7 @@ public class ProxyProvider {
     if (!StrUtils.isNullEmpty(getUsername())) {
       proxy.setSocksUsername(getUsername());
 
-      //we should only have a password if we have a username
+      // we should only have a password if we have a username
       if (!StrUtils.isNullEmpty(getPassword())) {
         proxy.setSocksPassword(getPassword());
       }
@@ -100,7 +100,7 @@ public class ProxyProvider {
       proxy.setSocksProxy(getHostName());
       proxy.setSocksUsername(getUsername());
 
-      //we should only have a password if we have a username
+      // we should only have a password if we have a username
       if (!StrUtils.isNullEmpty(getPassword())) {
         proxy.setSocksPassword(getPassword());
       }
@@ -110,14 +110,24 @@ public class ProxyProvider {
 
   @Override
   public String toString() {
-    return "ProxyProvider{" +
-        "service_name='" + service_name + '\'' +
-        ", host='" + host + '\'' +
-        ", username='" + username + '\'' +
-        ", password='" + password + '\'' +
-        ", id=" + id +
-        ", port=" + port +
-        '}';
+    return "ProxyProvider{"
+        + "service_name='"
+        + service_name
+        + '\''
+        + ", host='"
+        + host
+        + '\''
+        + ", username='"
+        + username
+        + '\''
+        + ", password='"
+        + password
+        + '\''
+        + ", id="
+        + id
+        + ", port="
+        + port
+        + '}';
   }
 
   @Override
@@ -129,10 +139,10 @@ public class ProxyProvider {
       return false;
     }
     ProxyProvider that = (ProxyProvider) o;
-    return port == that.port &&
-        Objects.equals(host, that.host) &&
-        Objects.equals(username, that.username) &&
-        Objects.equals(password, that.password);
+    return port == that.port
+        && Objects.equals(host, that.host)
+        && Objects.equals(username, that.username)
+        && Objects.equals(password, that.password);
   }
 
   @Override

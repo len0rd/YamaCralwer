@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.lenords.yama.api.lang.StrUtils;
 import net.lenords.yama.model.extract.RegexExtractor.ExtractorType;
-import net.lenords.yama.util.lang.StrUtils;
 
 /**
  * Represents a regular expression pattern, with constant regular expressions as well as portions of
