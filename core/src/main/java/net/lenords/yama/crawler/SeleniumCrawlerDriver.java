@@ -23,6 +23,11 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
+/**
+ * Interfaces with Selenium WebDriver and provides some basic convenience functions
+ *
+ * @author len0rd
+ */
 public class SeleniumCrawlerDriver implements CrawlerDriver {
   private WebDriver driver;
   private CrawlerConf config;
