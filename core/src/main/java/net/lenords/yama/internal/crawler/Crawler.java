@@ -1,8 +1,8 @@
-package net.lenords.yama.crawler;
+package net.lenords.yama.internal.crawler;
 
 import java.util.HashSet;
 import java.util.Set;
-import net.lenords.yama.internal.model.nav.Page;
+import net.lenords.yama.internal.model.Page;
 
 /**
  * @author len0rd

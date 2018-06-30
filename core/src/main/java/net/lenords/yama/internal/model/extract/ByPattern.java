@@ -1,8 +1,8 @@
 package net.lenords.yama.internal.model.extract;
 
 import java.util.List;
-import java.util.Map;
-import net.lenords.yama.crawler.SeleniumCrawlerDriver;
+
+import net.lenords.yama.internal.crawler.SeleniumCrawlerDriver;
 
 /**
  * Represents a By pattern. By's are used within Selenium to select specific HTML tags based on

@@ -1,4 +1,4 @@
-package net.lenords.yama.crawler;
+package net.lenords.yama.internal.crawler;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.BrowserVersion.BrowserVersionBuilder;
@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 import net.lenords.yama.api.lang.StrUtils;
 import net.lenords.yama.api.proxy.ProxyProvider;
-import net.lenords.yama.crawler.conf.CrawlerConf;
+import net.lenords.yama.internal.crawler.conf.CrawlerConf;
 import net.lenords.yama.internal.model.request.CrawlerRequest;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SessionNotCreatedException;

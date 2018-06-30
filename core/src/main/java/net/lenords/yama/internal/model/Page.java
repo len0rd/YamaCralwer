@@ -1,4 +1,4 @@
-package net.lenords.yama.internal.model.nav;
+package net.lenords.yama.internal.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.lenords.yama.crawler.CrawlerDriver;
+import net.lenords.yama.internal.crawler.CrawlerDriver;
 import net.lenords.yama.internal.model.actions.extract.ByExtractAction;
 import net.lenords.yama.internal.model.actions.extract.ExtractAction;
 import net.lenords.yama.internal.model.actions.extract.RegexExtractAction;

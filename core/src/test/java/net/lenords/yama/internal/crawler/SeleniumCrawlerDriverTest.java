@@ -1,8 +1,8 @@
-package net.lenords.yama.crawler;
+package net.lenords.yama.internal.crawler;
 
 import net.lenords.yama.api.proxy.ProxyProvider;
-import net.lenords.yama.crawler.conf.CrawlerConf;
-import net.lenords.yama.crawler.conf.SeleniumDriverType;
+import net.lenords.yama.internal.crawler.conf.CrawlerConf;
+import net.lenords.yama.internal.crawler.conf.SeleniumDriverType;
 import net.lenords.yama.internal.model.request.CrawlerRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

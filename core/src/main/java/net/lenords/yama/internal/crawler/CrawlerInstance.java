@@ -1,8 +1,8 @@
-package net.lenords.yama.crawler;
+package net.lenords.yama.internal.crawler;
 
-import net.lenords.yama.internal.model.nav.PageInstance;
+import net.lenords.yama.internal.controller.PageController;
 
-public class CrawlerInstance implements PageInstance.PageCallbackManager {
+public class CrawlerInstance implements PageController.PageCallbackManager {
 
   private Crawler crawler;
 

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import net.lenords.yama.api.lang.StrUtils;
+import net.lenords.yama.internal.model.Page;
 import net.lenords.yama.internal.model.Tuple;
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -77,7 +78,7 @@ public class RegexExtractor implements Tuple<String, String> {
    * further depth has to be explicitly scripted.
    *
    * <p>Identical to screen-scraper sub-extractors (as well as {@link
-   * net.lenords.yama.internal.model.nav.Page} level extractors), order matters. If there are multiple
+   * Page} level extractors), order matters. If there are multiple
    * sub-extractors that extract for the same key, the value returned will be the latest match.
    *
    * @see #tidyBeforeSubExtraction()

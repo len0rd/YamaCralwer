@@ -1,9 +1,7 @@
 package net.lenords.yama.internal.model.actions.extract;
 
-import net.lenords.yama.crawler.CrawlerDriver;
-import net.lenords.yama.crawler.SeleniumCrawlerDriver;
-import net.lenords.yama.internal.model.actions.Action;
-import net.lenords.yama.internal.model.actions.ActionResult;
+import net.lenords.yama.internal.crawler.CrawlerDriver;
+import net.lenords.yama.internal.crawler.SeleniumCrawlerDriver;
 import net.lenords.yama.internal.model.extract.ByPattern;
 import net.lenords.yama.internal.model.extract.ExtractionPattern;
 import net.lenords.yama.internal.model.extract.ExtractionResult;
