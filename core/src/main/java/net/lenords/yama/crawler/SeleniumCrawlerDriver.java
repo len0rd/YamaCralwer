@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 import net.lenords.yama.api.lang.StrUtils;
 import net.lenords.yama.api.proxy.ProxyProvider;
 import net.lenords.yama.crawler.conf.CrawlerConf;
-import net.lenords.yama.model.request.CrawlerRequest;
+import net.lenords.yama.internal.model.request.CrawlerRequest;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;

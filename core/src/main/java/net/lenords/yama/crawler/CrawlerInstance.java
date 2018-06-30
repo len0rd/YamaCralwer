@@ -1,6 +1,6 @@
 package net.lenords.yama.crawler;
 
-import net.lenords.yama.model.nav.PageInstance;
+import net.lenords.yama.internal.model.nav.PageInstance;
 
 public class CrawlerInstance implements PageInstance.PageCallbackManager {
 

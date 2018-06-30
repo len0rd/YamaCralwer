@@ -2,7 +2,7 @@ package net.lenords.yama.crawler;
 
 import java.util.HashSet;
 import java.util.Set;
-import net.lenords.yama.model.nav.Page;
+import net.lenords.yama.internal.model.nav.Page;
 
 /**
  * @author len0rd

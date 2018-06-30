@@ -3,7 +3,7 @@ package net.lenords.yama.api.lang;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.lenords.yama.model.extract.CommonRegex;
+import net.lenords.yama.internal.model.extract.CommonRegex;
 import org.apache.commons.text.StringEscapeUtils;
 
 public class StrUtils {
