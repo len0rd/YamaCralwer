@@ -14,7 +14,7 @@ import net.lenords.yama.internal.model.extract.RegexExtractor.ExtractorType;
  * Represents a regular expression pattern, with constant regular expressions as well as portions of
  * the expression you want extracted into variables.
  *
- * <p>Variables you want from the pattern are returned upon a call to the {@link #execute(String)}
+ * <p>Variables you want from the pattern are returned upon a call to the {@link #run(String)}
  * method.
  *
  * <p>To build a regex to run, make properly ordered calls to the {@link #add(String)} and {@link
@@ -29,7 +29,7 @@ import net.lenords.yama.internal.model.extract.RegexExtractor.ExtractorType;
  * like so: <br>
  * pattern.add("&lt;h1&gt;").add(new Extractor("fooBar", "[^&lt;&gt;]*")).add("&lt;/h1&gt;") <br>
  * Once you've added all the pieces of your extractor in order, call {@link #build()} and then
- * {@link #execute(String)} to get a map with fooBar and it's extracted value.
+ * {@link #run(String)} to get a map with fooBar and it's extracted value.
  *
  * @author len0rd
  * @since 2018-03-16
@@ -39,6 +39,7 @@ public class RegexPattern implements ExtractionPattern<String> {
 	private List<String> extractorNamesToRetrieve;
 	private String name;
 	private String fullRegex;
+	private Pattern compiledRegex;
 
 	/**
 	 * @param name Name of the Pattern
@@ -47,6 +48,7 @@ public class RegexPattern implements ExtractionPattern<String> {
 		this.name = name;
 		this.extractors = new ArrayList<>();
 		this.fullRegex = "";
+		this.compiledRegex = null;
 	}
 
 	public RegexPattern() {
@@ -88,6 +90,7 @@ public class RegexPattern implements ExtractionPattern<String> {
 
 			if (extractor.getType() == ExtractorType.NO_GROUP) {
 				// then we dont need to make a special group for this
+				//TODO:Add non-matching qualifier here??
 				regex.append(extractor.getValue());
 			} else {
 				// then this extractor has a group we want to match
@@ -103,16 +106,18 @@ public class RegexPattern implements ExtractionPattern<String> {
 		}
 
 		this.fullRegex = regex.toString();
+		this.compiledRegex = Pattern.compile(fullRegex);
 		return fullRegex;
 	}
 
 	@Override
-	public ExtractionResult execute(String matchAgainst) {
+	public ExtractionResult run(String matchAgainst) {
+		assert compiledRegex != null : "RegexPattern should first be built by calling the .build() method";
+
 		List<Map<String, String>> results = new ArrayList<>();
 
-		if (fullRegex != null && !fullRegex.isEmpty() && matchAgainst != null) {
-			Pattern pattern = Pattern.compile(fullRegex);
-			Matcher matcher = pattern.matcher(matchAgainst);
+		if (matchAgainst != null) {
+			Matcher matcher = compiledRegex.matcher(matchAgainst);
 			while (matcher.find()) {
 				Map<String, String> singleMatch = new HashMap<>();
 
@@ -120,7 +125,7 @@ public class RegexPattern implements ExtractionPattern<String> {
 					String result = matcher.group(name);
 					if (!StrUtils.isNullEmpty(result)) {
 						int extractorIndex = Integer.valueOf(name.substring(1, name.length()));
-						String keyName = extractors.get(extractorIndex).getKey();
+						//String keyName = extractors.get(extractorIndex).getKey();
 						// run tidiers for this extractor, if any:
 						singleMatch.putAll(extractors.get(extractorIndex).runTidiersAndSubextractors(result));
 					}
@@ -133,9 +138,9 @@ public class RegexPattern implements ExtractionPattern<String> {
 	}
 
 	@Override
-	public ExtractionResult buildAndExecute(String matchAgainst) {
+	public ExtractionResult buildAndRun(String matchAgainst) {
 		build();
-		return execute(matchAgainst);
+		return run(matchAgainst);
 	}
 
 	@Override

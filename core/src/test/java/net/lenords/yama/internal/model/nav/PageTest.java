@@ -20,8 +20,8 @@ public class PageTest {
             "https://www.zillow.com/jsonp/Hdp.htm?zpid=~#ID#~&fad=false&hc=false&lhdp=true&callback=YUI.Env.JSONP");
 
     assert testPage.getName().equals("PageTest");
-    assert testPage.getExtractors() != null;
-    assert testPage.getExtractors().isEmpty();
+    assert testPage.getExtractionPatterns() != null;
+    assert testPage.getExtractionPatterns().isEmpty();
 
     // create a bunch of regex extractors, and add to the page:
     RegexPattern desc =
@@ -56,8 +56,8 @@ public class PageTest {
         new RegexPattern("Lot").add("Lot:").add("Lot_Size", ".*?").add("acres<\\/li>");
 
     testPage.addExtractorPatterns(desc, sqft, bath, beds, prop, year, cost, cp1, lot);
-    assert testPage.getExtractors() != null;
-    assert !testPage.getExtractors().isEmpty();
+    assert testPage.getExtractionPatterns() != null;
+    assert !testPage.getExtractionPatterns().isEmpty();
 
     // make sure the get by name function works
     assert testPage.getExtractor("Description") != null;
@@ -108,8 +108,8 @@ public class PageTest {
             "https://www.zillow.com/jsonp/Hdp.htm?zpid=~#ID#~&fad=false&hc=false&lhdp=true&callback=YUI.Env.JSONP");
 
     assert testPage.getName().equals("PageTest");
-    assert testPage.getExtractors() != null;
-    assert testPage.getExtractors().isEmpty();
+    assert testPage.getExtractionPatterns() != null;
+    assert testPage.getExtractionPatterns().isEmpty();
 
     // create a bunch of regex extractors, and add to the page:
     RegexPattern desc =

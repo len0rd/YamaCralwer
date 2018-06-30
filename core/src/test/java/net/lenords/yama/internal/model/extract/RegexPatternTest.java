@@ -17,7 +17,7 @@ public class RegexPatternTest {
     pattern.build();
 
 
-    ExtractionResult results = pattern.execute(matchAgainst);
+    ExtractionResult results = pattern.run(matchAgainst);
 
     System.out.println(pattern.getGeneratedRegex());
 
@@ -41,7 +41,7 @@ public class RegexPatternTest {
 
     System.out.println(regex);
 
-    ExtractionResult results = emailMatcher.execute(matchAgainstSuccess);
+    ExtractionResult results = emailMatcher.run(matchAgainstSuccess);
 
     assert results != null;
     assert !results.getResult().isEmpty();
@@ -61,7 +61,7 @@ public class RegexPatternTest {
     String regex = tidyTest.build();
     System.out.println(regex);
 
-    ExtractionResult results = tidyTest.execute(matchAgainst);
+    ExtractionResult results = tidyTest.run(matchAgainst);
 
     assert results != null;
     assert !results.getResult().isEmpty();
@@ -75,7 +75,7 @@ public class RegexPatternTest {
 
     RegexPattern desc = new RegexPattern("Description").add("<div class=\\\\\\\"notranslate zsg-content-item\\\\\\\">").add("Description_Ad", ".*?").add("<\\\\\\/div>");
 
-    ExtractionResult result = desc.buildAndExecute(matchAgainst);
+    ExtractionResult result = desc.buildAndRun(matchAgainst);
     assert !result.isEmpty();
     System.out.println(result.getFirst().get("Description_Ad"));
   }

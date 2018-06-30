@@ -3,9 +3,16 @@ package net.lenords.yama.internal.controller;
 import net.lenords.yama.internal.YamaConstants;
 import net.lenords.yama.internal.crawler.Crawler;
 import net.lenords.yama.internal.crawler.CrawlerDriver;
+import net.lenords.yama.internal.crawler.SeleniumCrawlerDriver;
 import net.lenords.yama.internal.model.Page;
+import net.lenords.yama.internal.model.extract.ByPattern;
+import net.lenords.yama.internal.model.extract.ExtractionPattern;
+import net.lenords.yama.internal.model.extract.ExtractionResult;
+import net.lenords.yama.internal.model.extract.RegexPattern;
 import net.lenords.yama.internal.model.request.CrawlerRequest;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
@@ -19,22 +26,59 @@ import java.util.regex.Matcher;
 public class PageController {
 
 	//core members:
-	private Page page;
+	private Page page; //TODO::repurcussions of parallelizing model?
 	private PageCallbackManager pageCallbackManager;
 
 	//helper members
 	private CrawlerRequest lastBuiltRequest;
 	private boolean redirectDetected;
 	private String rawHtml;
+	private List<ExtractionResult> extractionResults;
 
 	public PageController(Page page, PageCallbackManager pageCallbackManager) {
 		this.page = page;
 		this.pageCallbackManager = pageCallbackManager;
 	}
 
+	public Map<String, Object> run(Map<String, Object> context, CrawlerDriver cd) {
+		fetch(context, cd);
+		context.putAll(extract(cd));
+		return context;
+	}
 
 	private void fetch(Map<String, Object> context, CrawlerDriver cd) {
 		replaceURLTokens(context);
+		this.rawHtml = cd.requestAndGet(lastBuiltRequest);
+	}
+
+	/**
+	 * Runs all ExtractActions associated with this page. This is automatically called by the {@link
+	 * #run(Map, CrawlerDriver)} method. NO NEED to call manually unless you've manually modified
+	 * something about the driver or RawHtml source within the pageController.
+	 *
+	 * @param cd The current CrawlerDriver, on which this page was just loaded
+	 */
+	private Map<String, Object> extract(CrawlerDriver cd) {
+		//TODO::This sucksssssssssss
+
+		// Run all extractors
+		// these need to be run in order
+		final Map<String, Object> lastResultsOfAllExtractors = new HashMap<>();
+
+		for (ExtractionPattern pattern : page.getExtractionPatterns()) {
+			ExtractionResult result = null;
+			if (pattern instanceof RegexPattern) {
+				result = ((RegexPattern) pattern).run(rawHtml);
+			} else if (pattern instanceof ByPattern) {
+				result = ((ByPattern) pattern).run((SeleniumCrawlerDriver) cd);
+			}
+			
+			if (result != null && !result.isEmpty()) {
+				lastResultsOfAllExtractors.putAll(result.getLatest());
+			}
+		}
+
+		return lastResultsOfAllExtractors;
 	}
 
 

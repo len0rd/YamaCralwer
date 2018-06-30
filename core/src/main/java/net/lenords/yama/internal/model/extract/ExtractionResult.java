@@ -38,18 +38,6 @@ public class ExtractionResult implements ActionResult<List<Map<String, String>>>
 
 	public Map<String, String> getLatest() {
 		if (!isEmpty()) {
-
-			//the boring way of doing it (no streams)
-      /*Map<String, String> latest = new HashMap<>();
-      for (Map<String, String> extraction : result) {
-        for (String key : extraction.keySet()) {
-          String value = extraction.get(key);
-          if ((value) != null) {
-            latestValues.put(key, value);//update to latest value
-          }
-        }
-      }*/
-
 			//stream needs to be serial (go through list in order of extraction)
 			return result.stream()
 				.reduce(new HashMap<>(), (accumulated, nextMap) -> {

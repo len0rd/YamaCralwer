@@ -11,6 +11,10 @@ public class ByExtractAction implements ExtractAction<CrawlerDriver> {
 	private ExtractionResult result;
 
 
+	public ByExtractAction(ByPattern pattern) {
+		this.pattern = pattern;
+	}
+
 	@Override
 	public ExtractionPattern getExtractionPattern() {
 		return pattern;
@@ -28,7 +32,7 @@ public class ByExtractAction implements ExtractAction<CrawlerDriver> {
 
 	@Override
 	public ExtractionResult run(CrawlerDriver context) {
-		return pattern.buildAndExecute((SeleniumCrawlerDriver) context);
+		return pattern.buildAndRun((SeleniumCrawlerDriver) context);
 	}
 
 	@Override

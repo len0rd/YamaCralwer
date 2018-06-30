@@ -14,9 +14,9 @@ public interface ExtractionPattern<T> {
 
 	T build();
 
-	ExtractionResult buildAndExecute(T matchAgainst);
+	ExtractionResult buildAndRun(T matchAgainst);
 
-	ExtractionResult execute(T matchAgainst);
+	ExtractionResult run(T matchAgainst);
 
 	List<String> getExtractorNamesToRetrieve();
 

@@ -19,12 +19,12 @@ public class ByPattern implements ExtractionPattern<SeleniumCrawlerDriver> {
 	}
 
 	@Override
-	public ExtractionResult buildAndExecute(SeleniumCrawlerDriver matchAgainst) {
+	public ExtractionResult buildAndRun(SeleniumCrawlerDriver matchAgainst) {
 		return null;
 	}
 
 	@Override
-	public ExtractionResult execute(SeleniumCrawlerDriver matchAgainst) {
+	public ExtractionResult run(SeleniumCrawlerDriver matchAgainst) {
 		return null;
 	}
 

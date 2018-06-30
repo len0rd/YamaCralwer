@@ -124,7 +124,7 @@ public class RegexExtractor implements Tuple<String, String> {
 		if (!StrUtils.isNullEmpty(extractedValue)) {
 			// Sub-Extractors which extract the same key will overwrite in pattern order.
 			for (RegexPattern subExtractor : subExtractors) {
-				subExtracted.putAll(subExtractor.buildAndExecute(extractedValue).getLatest());
+				subExtracted.putAll(subExtractor.buildAndRun(extractedValue).getLatest());
 			}
 
 			extractedValue = tidyBeforeSubExtraction ? extractedValue : runTidiers(extractedValue);

@@ -31,7 +31,7 @@ public class RegexExtractAction implements ExtractAction<String> {
 
 	@Override
 	public ExtractionResult run(String context) {
-		result = pattern.buildAndExecute(context);
+		result = pattern.run(context);
 		return result;
 	}
 
