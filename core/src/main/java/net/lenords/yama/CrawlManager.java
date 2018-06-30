@@ -14,18 +14,18 @@ import java.util.Set;
  */
 public interface CrawlManager {
 
-    void importCrawler(String filename);
+	void importCrawler(String filename);
 
-    void importCrawler(Crawler crawler);
+	void importCrawler(Crawler crawler);
 
-    void runCrawler(String crawlerName);
+	void runCrawler(String crawlerName);
 
-    void runCrawler(Crawler crawler);
+	void runCrawler(Crawler crawler);
 
-    Properties globalProperties();
+	Properties globalProperties();
 
-    Optional<Crawler> crawler(String crawlerName);
+	Optional<Crawler> crawler(String crawlerName);
 
-    Set<Crawler> activeCrawlers();
+	Set<Crawler> activeCrawlers();
 
 }

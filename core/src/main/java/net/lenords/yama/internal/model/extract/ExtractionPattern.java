@@ -12,14 +12,14 @@ import java.util.Map;
  */
 public interface ExtractionPattern<T> {
 
-  T build();
+	T build();
 
-  ExtractionResult buildAndExecute(T matchAgainst);
+	ExtractionResult buildAndExecute(T matchAgainst);
 
-  ExtractionResult execute(T matchAgainst);
+	ExtractionResult execute(T matchAgainst);
 
-  List<String> getExtractorNamesToRetrieve();
+	List<String> getExtractorNamesToRetrieve();
 
-  String getName();
+	String getName();
 
 }

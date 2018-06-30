@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import net.lenords.yama.util.StrUtils;
 import net.lenords.yama.internal.model.extract.RegexExtractor.ExtractorType;
 
@@ -34,122 +35,124 @@ import net.lenords.yama.internal.model.extract.RegexExtractor.ExtractorType;
  * @since 2018-03-16
  */
 public class RegexPattern implements ExtractionPattern<String> {
-  private List<RegexExtractor> extractors;
-  private List<String> extractorNamesToRetrieve;
-  private String name;
-  private String fullRegex;
+	private List<RegexExtractor> extractors;
+	private List<String> extractorNamesToRetrieve;
+	private String name;
+	private String fullRegex;
 
-  /** @param name Name of the Pattern */
-  public RegexPattern(String name) {
-    this.name = name;
-    this.extractors = new ArrayList<>();
-    this.fullRegex = "";
-  }
+	/**
+	 * @param name Name of the Pattern
+	 */
+	public RegexPattern(String name) {
+		this.name = name;
+		this.extractors = new ArrayList<>();
+		this.fullRegex = "";
+	}
 
-  public RegexPattern() {
-    this("Regex Extractor Pattern");
-  }
+	public RegexPattern() {
+		this("Regex Extractor Pattern");
+	}
 
-  /**
-   * Add constant regex to the full pattern.
-   *
-   * @param regexConst The regular expression to add.
-   * @return This, the current RegexPattern
-   */
-  public RegexPattern add(String regexConst) {
-    extractors.add(new RegexExtractor(null, regexConst).setType(ExtractorType.NO_GROUP));
-    return this;
-  }
+	/**
+	 * Add constant regex to the full pattern.
+	 *
+	 * @param regexConst The regular expression to add.
+	 * @return This, the current RegexPattern
+	 */
+	public RegexPattern add(String regexConst) {
+		extractors.add(new RegexExtractor(null, regexConst).setType(ExtractorType.NO_GROUP));
+		return this;
+	}
 
-  public RegexPattern add(RegexExtractor regexVar) {
-    extractors.add(regexVar);
-    return this;
-  }
+	public RegexPattern add(RegexExtractor regexVar) {
+		extractors.add(regexVar);
+		return this;
+	}
 
-  public RegexPattern add(String variableName, String variableRegex) {
-    extractors.add(new RegexExtractor(variableName, variableRegex));
-    return this;
-  }
+	public RegexPattern add(String variableName, String variableRegex) {
+		extractors.add(new RegexExtractor(variableName, variableRegex));
+		return this;
+	}
 
-  public List<RegexExtractor> getExtractors() {
-    return extractors;
-  }
+	public List<RegexExtractor> getExtractors() {
+		return extractors;
+	}
 
-  public String build() {
-    StringBuilder regex = new StringBuilder();
-    extractorNamesToRetrieve = new ArrayList<>();
+	public String build() {
+		StringBuilder regex = new StringBuilder();
+		extractorNamesToRetrieve = new ArrayList<>();
 
-    final int extractorsSize = extractors.size();
-    for (int i = 0; i < extractorsSize; i++) {
-      RegexExtractor extractor = extractors.get(i);
+		final int extractorsSize = extractors.size();
+		for (int i = 0; i < extractorsSize; i++) {
+			RegexExtractor extractor = extractors.get(i);
 
-      if (extractor.getType() == ExtractorType.NO_GROUP) {
-        // then we dont need to make a special group for this
-        regex.append(extractor.getValue());
-      } else {
-        // then this extractor has a group we want to match
-        String extractorName = "n" + i;
-        regex
-            .append("(?<")
-            .append(extractorName)
-            .append('>')
-            .append(extractor.getValue())
-            .append(')');
-        extractorNamesToRetrieve.add(extractorName);
-      }
-    }
+			if (extractor.getType() == ExtractorType.NO_GROUP) {
+				// then we dont need to make a special group for this
+				regex.append(extractor.getValue());
+			} else {
+				// then this extractor has a group we want to match
+				String extractorName = "n" + i;
+				regex
+					.append("(?<")
+					.append(extractorName)
+					.append('>')
+					.append(extractor.getValue())
+					.append(')');
+				extractorNamesToRetrieve.add(extractorName);
+			}
+		}
 
-    this.fullRegex = regex.toString();
-    return fullRegex;
-  }
+		this.fullRegex = regex.toString();
+		return fullRegex;
+	}
 
-  @Override
-  public ExtractionResult execute(String matchAgainst) {
-    List<Map<String, String>> results = new ArrayList<>();
+	@Override
+	public ExtractionResult execute(String matchAgainst) {
+		List<Map<String, String>> results = new ArrayList<>();
 
-    if (fullRegex != null && !fullRegex.isEmpty() && matchAgainst != null) {
-      Pattern pattern = Pattern.compile(fullRegex);
-      Matcher matcher = pattern.matcher(matchAgainst);
-      while (matcher.find()) {
-        Map<String, String> singleMatch = new HashMap<>();
+		if (fullRegex != null && !fullRegex.isEmpty() && matchAgainst != null) {
+			Pattern pattern = Pattern.compile(fullRegex);
+			Matcher matcher = pattern.matcher(matchAgainst);
+			while (matcher.find()) {
+				Map<String, String> singleMatch = new HashMap<>();
 
-        for (String name : extractorNamesToRetrieve) {
-          String result = matcher.group(name);
-          if (!StrUtils.isNullEmpty(result)) {
-            int extractorIndex = Integer.valueOf(name.substring(1, name.length()));
-            String keyName = extractors.get(extractorIndex).getKey();
-            // run tidiers for this extractor, if any:
-            singleMatch.putAll(extractors.get(extractorIndex).runTidiersAndSubextractors(result));
-          }
-        }
-        results.add(singleMatch);
-      }
-    }
+				for (String name : extractorNamesToRetrieve) {
+					String result = matcher.group(name);
+					if (!StrUtils.isNullEmpty(result)) {
+						int extractorIndex = Integer.valueOf(name.substring(1, name.length()));
+						String keyName = extractors.get(extractorIndex).getKey();
+						// run tidiers for this extractor, if any:
+						singleMatch.putAll(extractors.get(extractorIndex).runTidiersAndSubextractors(result));
+					}
+				}
+				results.add(singleMatch);
+			}
+		}
 
-    return new ExtractionResult(results);
-  }
+		return new ExtractionResult(results);
+	}
 
-  @Override
-  public ExtractionResult buildAndExecute(String matchAgainst) {
-    build();
-    return execute(matchAgainst);
-  }
+	@Override
+	public ExtractionResult buildAndExecute(String matchAgainst) {
+		build();
+		return execute(matchAgainst);
+	}
 
-  @Override
-  public List<String> getExtractorNamesToRetrieve() {
-    return extractorNamesToRetrieve;
-  }
+	@Override
+	public List<String> getExtractorNamesToRetrieve() {
+		return extractorNamesToRetrieve;
+	}
 
-  public String getGeneratedRegex() {
-    return fullRegex;
-  }
+	public String getGeneratedRegex() {
+		return fullRegex;
+	}
 
-  @Override
-  public String getName() {
-    return name;
-  }
+	@Override
+	public String getName() {
+		return name;
+	}
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 }

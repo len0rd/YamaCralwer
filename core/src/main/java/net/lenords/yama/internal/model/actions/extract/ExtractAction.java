@@ -6,11 +6,11 @@ import net.lenords.yama.internal.model.extract.ExtractionResult;
 
 public interface ExtractAction<T> extends Action<T, ExtractionResult> {
 
-  ExtractionPattern getExtractionPattern();
+	ExtractionPattern getExtractionPattern();
 
-  ExtractionResult getExtractionResult();
+	ExtractionResult getExtractionResult();
 
-  void clearResult();
+	void clearResult();
 
 
 }

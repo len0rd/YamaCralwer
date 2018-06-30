@@ -2,7 +2,6 @@ package net.lenords.yama;
 
 
 /**
- *
  * Yama public API
  *
  * @author len0rd

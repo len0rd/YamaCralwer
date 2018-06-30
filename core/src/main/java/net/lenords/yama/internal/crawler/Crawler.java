@@ -2,6 +2,7 @@ package net.lenords.yama.internal.crawler;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import net.lenords.yama.internal.model.Page;
 
 /**
@@ -10,29 +11,29 @@ import net.lenords.yama.internal.model.Page;
  */
 public class Crawler {
 
-  private Set<Page> pages;
+	private Set<Page> pages;
 
-  public Crawler() {
-    this.pages = new HashSet<>();
-  }
+	public Crawler() {
+		this.pages = new HashSet<>();
+	}
 
-  public Crawler addPage(Page pageToAdd) {
-    if (pages.stream().noneMatch(page -> page.getName().equals(pageToAdd.getName()))) {
-      pages.add(pageToAdd);
-    } else {
-      System.out.println(
-          "Could not add page: "
-              + pageToAdd.getName()
-              + " since the crawler already has a page by that name");
-    }
-    return this;
-  }
+	public Crawler addPage(Page pageToAdd) {
+		if (pages.stream().noneMatch(page -> page.getName().equals(pageToAdd.getName()))) {
+			pages.add(pageToAdd);
+		} else {
+			System.out.println(
+				"Could not add page: "
+					+ pageToAdd.getName()
+					+ " since the crawler already has a page by that name");
+		}
+		return this;
+	}
 
-  public Set<Page> getPages() {
-    return pages;
-  }
+	public Set<Page> getPages() {
+		return pages;
+	}
 
-  public void setPages(Set<Page> pages) {
-    this.pages = pages;
-  }
+	public void setPages(Set<Page> pages) {
+		this.pages = pages;
+	}
 }

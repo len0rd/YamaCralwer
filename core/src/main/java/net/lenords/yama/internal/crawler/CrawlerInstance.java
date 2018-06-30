@@ -4,15 +4,17 @@ import net.lenords.yama.internal.controller.PageController;
 
 public class CrawlerInstance implements PageController.PageCallbackManager {
 
-  private Crawler crawler;
+	private Crawler crawler;
 
-  public CrawlerInstance(Crawler crawler) {
-    this.crawler = crawler;
-  }
+	public CrawlerInstance(Crawler crawler) {
+		this.crawler = crawler;
+	}
 
-  @Override
-  public void onBeforePageLoad() {}
+	@Override
+	public void onBeforePageLoad() {
+	}
 
-  @Override
-  public void onAfterPageCrawled() {}
+	@Override
+	public void onAfterPageCrawled() {
+	}
 }

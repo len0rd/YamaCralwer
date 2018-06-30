@@ -1,23 +1,24 @@
 package net.lenords.yama.internal.crawler;
 
 import java.net.URL;
+
 import net.lenords.yama.internal.crawler.conf.CrawlerConf;
 import net.lenords.yama.internal.model.request.CrawlerRequest;
 
 public interface CrawlerDriver {
 
-  String getCurrentSource();
+	String getCurrentSource();
 
-  String getCurrentURLStr();
+	String getCurrentURLStr();
 
-  URL getCurrentURL();
+	URL getCurrentURL();
 
-  String resolveRelativeToAbsoluteURLStr(String relativeURL);
+	String resolveRelativeToAbsoluteURLStr(String relativeURL);
 
-  String requestAndGet(CrawlerRequest request);
+	String requestAndGet(CrawlerRequest request);
 
-  CrawlerConf getConfig();
+	CrawlerConf getConfig();
 
-  void close();
+	void close();
 
 }

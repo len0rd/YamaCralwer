@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import net.lenords.yama.internal.crawler.CrawlerDriver;
 import net.lenords.yama.internal.model.actions.extract.ByExtractAction;
 import net.lenords.yama.internal.model.actions.extract.ExtractAction;
@@ -22,168 +23,137 @@ import net.lenords.yama.internal.model.request.CrawlerRequest;
  * @since 2018-03-21
  */
 public class Page {
-  private String name, currentURL;
-  private String rawHtml;
-  private boolean redirectDetected;
-  // the original request sent to the driver to process.
-  private CrawlerRequest lastBuiltRequest;
-  private final CrawlerRequest baseRequest;
-  private static final Pattern tokenPattern = Pattern.compile("~#(.+?)#~");
-  // created after the request is executed by the driver. Having the two requests
-  // allows us to compare and see if we were redirected/cookie additions, etc.
-  private CrawlerRequest resultingRequest;
-  private List<ExtractAction> extractors;
+	private String name;
+	private String rawHtml;
+	private boolean redirectDetected;
+	// the original request sent to the driver to process.
+	private CrawlerRequest lastBuiltRequest;
+	private final CrawlerRequest baseRequest;
+	//private static final Pattern tokenPattern = Pattern.compile("~#(.+?)#~");
+	// created after the request is executed by the driver. Having the two requests
+	// allows us to compare and see if we were redirected/cookie additions, etc.
+	private CrawlerRequest resultingRequest;
+	private List<ExtractAction> extractors;
 
-  public Page(String name, String baseURL) {
-    this.name = name;
-    this.extractors = new ArrayList<>();
-    this.baseRequest = new CrawlerRequest(baseURL);
-  }
+	public Page(String name, String baseURL) {
+		this.name = name;
+		this.extractors = new ArrayList<>();
+		this.baseRequest = new CrawlerRequest(baseURL);
+	}
 
-  /**
-   * @param cd The current crawler driver, to load this page on
-   * @return The latest match (ie: the one furthest down on the document) from all extractors,
-   *     combined into a single map. These are put into the map in order of their addition to the
-   *     page, meaning identically named values across different ExtractActions can be overwritten.
-   *     To access a specific ExtractActions results, call {@link #getExtractor(String)} after
-   *     calling this run function.
-   */
-  public Map<String, Object> run(Map<String, Object> context, CrawlerDriver cd) {
-    // reset some the stuff that changes on each load
-    extractors.parallelStream().forEach(ExtractAction::clearResult);
-    this.currentURL = null;
+	/**
+	 * @param cd The current crawler driver, to load this page on
+	 * @return The latest match (ie: the one furthest down on the document) from all extractors,
+	 * combined into a single map. These are put into the map in order of their addition to the
+	 * page, meaning identically named values across different ExtractActions can be overwritten.
+	 * To access a specific ExtractActions results, call {@link #getExtractor(String)} after
+	 * calling this run function.
+	 */
+	public Map<String, Object> run(Map<String, Object> context, CrawlerDriver cd) {
+		// reset some the stuff that changes on each load
+		extractors.parallelStream().forEach(ExtractAction::clearResult);
+		//this.currentURL = null;
 
-    findReplaceTokens(context);
+		//findReplaceTokens(context);
 
-    this.rawHtml = cd.requestAndGet(lastBuiltRequest);
-    final Map<String, Object> lastResultsOfAllExtractors = new HashMap<>();
-    runAllExtractors(cd);
+		this.rawHtml = cd.requestAndGet(lastBuiltRequest);
+		final Map<String, Object> lastResultsOfAllExtractors = new HashMap<>();
+		runAllExtractors(cd);
 
-    extractors
-        .stream()
-        .filter(extractAction -> !extractAction.getExtractionResult().isEmpty())
-        .forEach(
-            extractAction ->
-                lastResultsOfAllExtractors.putAll(extractAction.getExtractionResult().getLatest()));
+		extractors
+			.stream()
+			.filter(extractAction -> !extractAction.getExtractionResult().isEmpty())
+			.forEach(
+				extractAction ->
+					lastResultsOfAllExtractors.putAll(extractAction.getExtractionResult().getLatest()));
 
-    // redirectDetected = lastBuiltRequest.equals()
-    // reset orig request now that we're done
-    return lastResultsOfAllExtractors;
-  }
+		// redirectDetected = lastBuiltRequest.equals()
+		// reset orig request now that we're done
+		return lastResultsOfAllExtractors;
+	}
 
-  /**
-   * This request defines the request structure of this page. Setup tokens (ie: ~#TOKEN_NAME#~)
-   * within the base url and get parameters of this request. At load time they will be replaced by
-   * the current context map, with values that have matching key names (case-sensitive)
-   *
-   * @return The base request for this page
-   */
-  public CrawlerRequest getBaseRequest() {
-    return baseRequest;
-  }
+	/**
+	 * This request defines the request structure of this page. Setup tokens (ie: ~#TOKEN_NAME#~)
+	 * within the base url and get parameters of this request. At load time they will be replaced by
+	 * the current context map, with values that have matching key names (case-sensitive)
+	 *
+	 * @return The base request for this page
+	 */
+	public CrawlerRequest getBaseRequest() {
+		return baseRequest;
+	}
 
-  public CrawlerRequest getBuiltRequest() {
-    return lastBuiltRequest;
-  }
+	public CrawlerRequest getBuiltRequest() {
+		return lastBuiltRequest;
+	}
 
-  /**
-   * Runs all ExtractActions associated with this page. This is automatically called by the {@link
-   * #run(Map, CrawlerDriver)} method. NO NEED to call manually unless you've manually modified
-   * something about the driver or RawHtml source within this page object.
-   *
-   * @param cd The current CrawlerDriver, on which this page was just loaded
-   */
-  private void runAllExtractors(CrawlerDriver cd) {
-    // Run all extractors
-    // these need to be run in order, otherwise this
-    // couldve been done in parallell streams
-    for (ExtractAction extractor : extractors) {
-      if (extractor instanceof RegexExtractAction) {
-        ((RegexExtractAction) extractor).run(rawHtml);
-      } else if (extractor instanceof ByExtractAction) {
-        ((ByExtractAction) extractor).run(cd);
-      }
-    }
+	/**
+	 * Runs all ExtractActions associated with this page. This is automatically called by the {@link
+	 * #run(Map, CrawlerDriver)} method. NO NEED to call manually unless you've manually modified
+	 * something about the driver or RawHtml source within this page object.
+	 *
+	 * @param cd The current CrawlerDriver, on which this page was just loaded
+	 */
+	private void runAllExtractors(CrawlerDriver cd) {
+		// Run all extractors
+		// these need to be run in order, otherwise this
+		// couldve been done in parallell streams
+		for (ExtractAction extractor : extractors) {
+			if (extractor instanceof RegexExtractAction) {
+				((RegexExtractAction) extractor).run(rawHtml);
+			} else if (extractor instanceof ByExtractAction) {
+				((ByExtractAction) extractor).run(cd);
+			}
+		}
     /*
     extractors.stream().filter(extractAction -> extractAction instanceof RegexExtractAction)
         .forEach(regexAction -> ((RegexExtractAction)regexAction).run(rawHtml));
     extractors.stream().filter(extractAction -> extractAction instanceof ByExtractAction)
         .forEach(byAction -> ((ByExtractAction)byAction).run(cd));*/
 
-  }
+	}
 
-  public void findReplaceTokens(Map<String, Object> context) {
-    // TODO: do we need deep copy/clone here? possibly for the http param list
-    lastBuiltRequest = new CrawlerRequest(baseRequest);
-    if (lastBuiltRequest.hasTokens()) {
-      lastBuiltRequest.setBaseUrl(replaceTokensInString(context, lastBuiltRequest.getBaseUrl()));
 
-      if (lastBuiltRequest.hasTokens()) { // if the request still has tokens
+	public String getRawHtml() {
+		return rawHtml;
+	}
 
-        // then we need to replace all tokens in key value pairs:
+	public void setRawHtml(String rawHtml) {
+		this.rawHtml = rawHtml;
+	}
 
-        lastBuiltRequest
-            .getGetParams()
-            .forEach(
-                param -> {
-                  param.setKey(replaceTokensInString(context, param.getKey()));
-                  param.setValue(replaceTokensInString(context, param.getValue()));
-                });
-      }
-    }
-  }
+	public Page addExtractorPatterns(RegexPattern... patterns) {
+		if (patterns != null) {
+			Arrays.stream(patterns).forEach(pattern -> extractors.add(new RegexExtractAction(pattern)));
+		}
+		return this;
+	}
 
-  private String replaceTokensInString(Map<String, Object> context, String replaceIn) {
-    Matcher tokenMatcher = tokenPattern.matcher(replaceIn);
-    while (tokenMatcher.find()) {
-      String keyName = tokenMatcher.group(1);
-      if (context.containsKey(keyName)) {
-        replaceIn = replaceIn.replace("~#" + keyName + "#~", context.get(keyName).toString());
-      }
-    }
-    return replaceIn;
-  }
+	public Page addExtractActions(ExtractAction... actions) {
+		if (actions != null) {
+			extractors.addAll(Arrays.asList(actions));
+		}
+		return this;
+	}
 
-  public String getRawHtml() {
-    return rawHtml;
-  }
+	public ExtractAction getExtractor(String extractorName) {
+		return extractors
+			.stream()
+			.filter(extractionPattern -> extractionPattern.getName().equals(extractorName))
+			.findFirst()
+			.orElse(null);
+	}
 
-  public void setRawHtml(String rawHtml) {
-    this.rawHtml = rawHtml;
-  }
+	public List<ExtractAction> getExtractors() {
+		return extractors;
+	}
 
-  public Page addExtractorPatterns(RegexPattern... patterns) {
-    if (patterns != null) {
-      Arrays.stream(patterns).forEach(pattern -> extractors.add(new RegexExtractAction(pattern)));
-    }
-    return this;
-  }
+	public String getName() {
+		return name;
+	}
 
-  public Page addExtractActions(ExtractAction... actions) {
-    if (actions != null) {
-      extractors.addAll(Arrays.asList(actions));
-    }
-    return this;
-  }
-
-  public ExtractAction getExtractor(String extractorName) {
-    return extractors
-        .stream()
-        .filter(extractionPattern -> extractionPattern.getName().equals(extractorName))
-        .findFirst()
-        .orElse(null);
-  }
-
-  public List<ExtractAction> getExtractors() {
-    return extractors;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(name);
-  }
+	@Override
+	public int hashCode() {
+		return Objects.hash(name);
+	}
 }

@@ -13,28 +13,28 @@ import net.lenords.yama.internal.crawler.SeleniumCrawlerDriver;
  */
 public class ByPattern implements ExtractionPattern<SeleniumCrawlerDriver> {
 
-  @Override
-  public SeleniumCrawlerDriver build() {
-    return null;
-  }
+	@Override
+	public SeleniumCrawlerDriver build() {
+		return null;
+	}
 
-  @Override
-  public ExtractionResult buildAndExecute(SeleniumCrawlerDriver matchAgainst) {
-    return null;
-  }
+	@Override
+	public ExtractionResult buildAndExecute(SeleniumCrawlerDriver matchAgainst) {
+		return null;
+	}
 
-  @Override
-  public ExtractionResult execute(SeleniumCrawlerDriver matchAgainst) {
-    return null;
-  }
+	@Override
+	public ExtractionResult execute(SeleniumCrawlerDriver matchAgainst) {
+		return null;
+	}
 
-  @Override
-  public List<String> getExtractorNamesToRetrieve() {
-    return null;
-  }
+	@Override
+	public List<String> getExtractorNamesToRetrieve() {
+		return null;
+	}
 
-  @Override
-  public String getName() {
-    return null;
-  }
+	@Override
+	public String getName() {
+		return null;
+	}
 }

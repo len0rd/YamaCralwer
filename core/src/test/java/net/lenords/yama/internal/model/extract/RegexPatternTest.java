@@ -1,5 +1,6 @@
 package net.lenords.yama.internal.model.extract;
 
+import net.lenords.yama.util.CommonRegex;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
