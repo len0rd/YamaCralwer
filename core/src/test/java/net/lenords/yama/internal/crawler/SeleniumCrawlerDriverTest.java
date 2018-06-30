@@ -1,6 +1,6 @@
 package net.lenords.yama.internal.crawler;
 
-import net.lenords.yama.api.proxy.ProxyProvider;
+import net.lenords.yama.util.ProxyProvider;
 import net.lenords.yama.internal.crawler.conf.CrawlerConf;
 import net.lenords.yama.internal.crawler.conf.SeleniumDriverType;
 import net.lenords.yama.internal.model.request.CrawlerRequest;

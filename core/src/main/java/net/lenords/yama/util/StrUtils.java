@@ -1,4 +1,4 @@
-package net.lenords.yama.api.lang;
+package net.lenords.yama.util;
 
 import java.util.List;
 import java.util.regex.Matcher;

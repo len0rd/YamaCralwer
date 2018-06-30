@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.lenords.yama.api.lang.StrUtils;
+import net.lenords.yama.util.StrUtils;
 import net.lenords.yama.internal.model.extract.RegexExtractor.ExtractorType;
 
 /**

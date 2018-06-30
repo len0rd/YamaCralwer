@@ -1,7 +1,7 @@
-package net.lenords.yama.api.proxy;
+package net.lenords.yama.util;
 
 import java.util.Objects;
-import net.lenords.yama.api.lang.StrUtils;
+
 import org.openqa.selenium.Proxy;
 
 public class ProxyProvider {

@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.lenords.yama.api.lang.StrUtils;
+import net.lenords.yama.util.StrUtils;
 import net.lenords.yama.internal.model.Page;
 import net.lenords.yama.internal.model.Tuple;
 import org.apache.commons.text.StringEscapeUtils;
