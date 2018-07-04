@@ -1,11 +1,11 @@
 package net.lenords.yama.internal.controller;
 
-import net.lenords.yama.internal.YamaConstants;
+import net.lenords.yama.internal.Constants;
 import net.lenords.yama.internal.model.Crawler;
 import net.lenords.yama.internal.crawler.CrawlerDriver;
 import net.lenords.yama.internal.crawler.SeleniumCrawlerDriver;
 import net.lenords.yama.internal.model.Page;
-import net.lenords.yama.internal.model.actions.Action;
+import net.lenords.yama.internal.model.Action;
 import net.lenords.yama.internal.model.extract.ByPattern;
 import net.lenords.yama.internal.model.extract.ExtractionPattern;
 import net.lenords.yama.internal.model.extract.ExtractionResult;
@@ -44,7 +44,7 @@ public class PageController {
 	public Map<String, Object> run(Map<String, Object> context, CrawlerDriver cd) {
 		//set the global 'page' variable to this current page instance (akin to Screen-Scraper's "scrapeableFile" variable
 		// accessible from scripts)
-		context.put(YamaConstants.CURRENT_PAGE_CONTEXT_KEY, this);
+		context.put(Constants.CURRENT_PAGE_CONTEXT_KEY, this);
 
 		// run actions before fetch:
 		for (Action action : page.getBeforeFetchActions()) {
@@ -120,7 +120,7 @@ public class PageController {
 	}
 
 	private String replaceTokensInString(Map<String, Object> context, String replaceIn) {
-		Matcher tokenMatcher = YamaConstants.TOKEN_PATTERN.matcher(replaceIn);
+		Matcher tokenMatcher = Constants.TOKEN_PATTERN.matcher(replaceIn);
 		while (tokenMatcher.find()) {
 			String keyName = tokenMatcher.group(1);
 			if (context.containsKey(keyName)) {

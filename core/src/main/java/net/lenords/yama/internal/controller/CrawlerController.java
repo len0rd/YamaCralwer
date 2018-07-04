@@ -1,8 +1,8 @@
 package net.lenords.yama.internal.controller;
 
-import net.lenords.yama.internal.YamaConstants;
+import net.lenords.yama.internal.Constants;
 import net.lenords.yama.internal.model.Crawler;
-import net.lenords.yama.internal.model.actions.Action;
+import net.lenords.yama.internal.model.Action;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +21,7 @@ public class CrawlerController implements PageController.PageCallbackManager {
 	public void run() {
 		// Create the base context with a reference to this controller:
 		Map<String, Object> baseContext = new HashMap<>();
-		 baseContext.put(YamaConstants.CURRENT_CRAWLER_CONTEXT_KEY, this);
+		 baseContext.put(Constants.CURRENT_CRAWLER_CONTEXT_KEY, this);
 
 	}
 

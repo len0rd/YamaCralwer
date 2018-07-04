@@ -1,9 +1,11 @@
-package net.lenords.yama.internal.model.actions.extract;
+package net.lenords.yama.internal.model.extract;
 
-import net.lenords.yama.internal.model.extract.ExtractionPattern;
-import net.lenords.yama.internal.model.extract.ExtractionResult;
-import net.lenords.yama.internal.model.extract.RegexPattern;
-
+/**
+ * Execute a Regular Expression against a given context. Generally
+ * the context executed against is the raw html returned from a page load
+ *
+ * @author len0rd
+ */
 public class RegexExtractAction implements ExtractAction<String> {
 	private RegexPattern pattern;
 	private ExtractionResult result;

@@ -1,11 +1,15 @@
-package net.lenords.yama.internal.model.actions.extract;
+package net.lenords.yama.internal.model.extract;
 
 import net.lenords.yama.internal.crawler.CrawlerDriver;
 import net.lenords.yama.internal.crawler.SeleniumCrawlerDriver;
-import net.lenords.yama.internal.model.extract.ByPattern;
-import net.lenords.yama.internal.model.extract.ExtractionPattern;
-import net.lenords.yama.internal.model.extract.ExtractionResult;
 
+/**
+ * Uses Selenium's By interface to enable powerful extraction
+ * options. These include extraction by id, css selector, class
+ * name, and xpath.
+ *
+ * @author len0rd
+ */
 public class ByExtractAction implements ExtractAction<CrawlerDriver> {
 	private ByPattern pattern;
 	private ExtractionResult result;

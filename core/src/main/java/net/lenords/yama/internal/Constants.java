@@ -9,7 +9,9 @@ import java.util.regex.Pattern;
  * @author len0rd
  * @since 2018-06-29
  */
-public class YamaConstants {
+public final class Constants {
+
+	private Constants(){} //restrict instantiation
 
 	// compiled pattern of what a token in a RegexExtractor, or url looks like
 	public static final Pattern TOKEN_PATTERN = Pattern.compile("~#(.+?)#~");

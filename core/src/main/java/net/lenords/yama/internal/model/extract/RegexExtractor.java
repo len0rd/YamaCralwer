@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.lenords.yama.internal.model.actions.Action;
 import net.lenords.yama.util.CommonRegex;
 import net.lenords.yama.util.StrUtils;
 import net.lenords.yama.internal.model.Page;

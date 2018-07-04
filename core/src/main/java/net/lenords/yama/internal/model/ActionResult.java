@@ -1,4 +1,4 @@
-package net.lenords.yama.internal.model.actions;
+package net.lenords.yama.internal.model;
 
 public interface ActionResult<T> {
 

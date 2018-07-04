@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import net.lenords.yama.internal.model.actions.Action;
 import net.lenords.yama.internal.model.extract.ExtractionPattern;
 import net.lenords.yama.internal.model.request.CrawlerRequest;
 

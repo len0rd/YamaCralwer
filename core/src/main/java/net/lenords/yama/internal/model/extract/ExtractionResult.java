@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.lenords.yama.internal.model.actions.ActionResult;
+import net.lenords.yama.internal.model.ActionResult;
 
 public class ExtractionResult implements ActionResult<List<Map<String, String>>> {
 	private List<Map<String, String>> result;
