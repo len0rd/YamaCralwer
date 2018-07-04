@@ -1,6 +1,6 @@
 package net.lenords.yama;
 
-import net.lenords.yama.internal.crawler.Crawler;
+import net.lenords.yama.internal.model.Crawler;
 
 import java.util.Optional;
 import java.util.Properties;

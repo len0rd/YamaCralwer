@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import net.lenords.yama.internal.model.actions.Action;
 import net.lenords.yama.internal.model.extract.ExtractionPattern;
 import net.lenords.yama.internal.model.request.CrawlerRequest;
 
@@ -19,11 +20,15 @@ public class Page {
 	//the base, tokenized request
 	private final CrawlerRequest baseRequest;
 	private List<ExtractionPattern> extractionPatterns;
+	private List<Action> beforeFetchActions, afterFetchActions, afterExtractActions;
 
 	public Page(String name, String baseURL) {
 		this.name = name;
 		this.extractionPatterns = new ArrayList<>();
 		this.baseRequest = new CrawlerRequest(baseURL);
+		this.beforeFetchActions  = new ArrayList<>();
+		this.afterFetchActions   = new ArrayList<>();
+		this.afterExtractActions = new ArrayList<>();
 	}
 
 	/**
@@ -42,6 +47,34 @@ public class Page {
 			extractionPatterns.addAll(Arrays.asList(patterns));
 		}
 		return this;
+	}
+
+	public void setExtractionPatterns(List<ExtractionPattern> extractionPatterns) {
+		this.extractionPatterns = extractionPatterns;
+	}
+
+	public List<Action> getBeforeFetchActions() {
+		return beforeFetchActions;
+	}
+
+	public void setBeforeFetchActions(List<Action> beforeFetchActions) {
+		this.beforeFetchActions = beforeFetchActions;
+	}
+
+	public List<Action> getAfterFetchActions() {
+		return afterFetchActions;
+	}
+
+	public void setAfterFetchActions(List<Action> afterFetchActions) {
+		this.afterFetchActions = afterFetchActions;
+	}
+
+	public List<Action> getAfterExtractActions() {
+		return afterExtractActions;
+	}
+
+	public void setAfterExtractActions(List<Action> afterExtractActions) {
+		this.afterExtractActions = afterExtractActions;
 	}
 
 	public ExtractionPattern getExtractor(String extractorName) {

@@ -1,4 +1,4 @@
-package net.lenords.yama.internal.crawler.conf;
+package net.lenords.yama.internal.conf;
 
 public enum SeleniumDriverType {
 	CHROME,

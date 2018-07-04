@@ -1,10 +1,11 @@
 package net.lenords.yama.internal.controller;
 
 import net.lenords.yama.internal.YamaConstants;
-import net.lenords.yama.internal.crawler.Crawler;
+import net.lenords.yama.internal.model.Crawler;
 import net.lenords.yama.internal.crawler.CrawlerDriver;
 import net.lenords.yama.internal.crawler.SeleniumCrawlerDriver;
 import net.lenords.yama.internal.model.Page;
+import net.lenords.yama.internal.model.actions.Action;
 import net.lenords.yama.internal.model.extract.ByPattern;
 import net.lenords.yama.internal.model.extract.ExtractionPattern;
 import net.lenords.yama.internal.model.extract.ExtractionResult;
@@ -41,7 +42,16 @@ public class PageController {
 	}
 
 	public Map<String, Object> run(Map<String, Object> context, CrawlerDriver cd) {
+		//set the global 'page' variable to this current page instance (akin to Screen-Scraper's "scrapeableFile" variable
+		// accessible from scripts)
+		context.put(YamaConstants.CURRENT_PAGE_CONTEXT_KEY, this);
+
+		// run actions before fetch:
+		for (Action action : page.getBeforeFetchActions()) {
+			context = pageCallbackManager.onBeforeFetch(context, action);
+		}
 		fetch(context, cd);
+		// run actions after fetch
 		context.putAll(extract(cd));
 		return context;
 	}
@@ -72,7 +82,7 @@ public class PageController {
 			} else if (pattern instanceof ByPattern) {
 				result = ((ByPattern) pattern).run((SeleniumCrawlerDriver) cd);
 			}
-			
+
 			if (result != null && !result.isEmpty()) {
 				lastResultsOfAllExtractors.putAll(result.getLatest());
 			}
@@ -80,7 +90,6 @@ public class PageController {
 
 		return lastResultsOfAllExtractors;
 	}
-
 
 	/**
 	 * Find and replace tokens (ie: ~#Variable_Name#~) in the base request given the current crawler context.
@@ -122,8 +131,10 @@ public class PageController {
 	}
 
 	public interface PageCallbackManager {
-		void onBeforePageLoad();
+		Map<String, Object> onBeforeFetch(Map<String, Object> context, Action action);
 
-		void onAfterPageCrawled();
+		Map<String, Object> onAfterFetch(Map<String, Object> context, Action action);
+
+		Map<String, Object> onAfterExtract(Map<String, Object> context, Action action);
 	}
 }

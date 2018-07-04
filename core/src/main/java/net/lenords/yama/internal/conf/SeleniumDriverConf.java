@@ -1,9 +1,12 @@
-package net.lenords.yama.internal.crawler.conf;
+package net.lenords.yama.internal.conf;
 
-public class CrawlerConf {
-	private static final boolean DEFAULT_HEADLESS = true, DEFAULT_IN_SERVER = true,
-		DEFAULT_LOAD_IMG = false, DEFAULT_RUN_JS = true;
-	private static final String DEFAULT_CUSTOM_ARGS = null, DEFAULT_UA = null;
+public class SeleniumDriverConf {
+	private static final boolean DEFAULT_HEADLESS = true,
+		DEFAULT_IN_SERVER = true,
+		DEFAULT_LOAD_IMG = false,
+		DEFAULT_RUN_JS = true;
+	private static final String DEFAULT_CUSTOM_ARGS = null,
+		DEFAULT_UA = null;
 	private static final int DEFAULT_PL_TIMEOUT = 30;
 
 	private SeleniumDriverType driver;
@@ -11,17 +14,17 @@ public class CrawlerConf {
 	private String customArgs, userAgent;
 	private int pageLoadTimeout;
 
-	public CrawlerConf(SeleniumDriverType type) {
+	public SeleniumDriverConf(SeleniumDriverType type) {
 		this(type, DEFAULT_LOAD_IMG, DEFAULT_RUN_JS);
 	}
 
-	public CrawlerConf(SeleniumDriverType type, boolean loadImg, boolean runJs) {
+	public SeleniumDriverConf(SeleniumDriverType type, boolean loadImg, boolean runJs) {
 		this(type, DEFAULT_HEADLESS, loadImg, runJs, DEFAULT_IN_SERVER, DEFAULT_CUSTOM_ARGS,
 			DEFAULT_UA, DEFAULT_PL_TIMEOUT);
 	}
 
-	public CrawlerConf(SeleniumDriverType driver, boolean headless, boolean loadImg, boolean runJs,
-	                   boolean inServerMode, String customArgs, String defaultUserAgent, int pageLoadTimeout) {
+	public SeleniumDriverConf(SeleniumDriverType driver, boolean headless, boolean loadImg, boolean runJs,
+	                          boolean inServerMode, String customArgs, String defaultUserAgent, int pageLoadTimeout) {
 		this.driver = driver;
 		this.headless = headless;
 		this.loadImg = loadImg;
@@ -90,7 +93,7 @@ public class CrawlerConf {
 
 	@Override
 	public String toString() {
-		return "CrawlerConf{" +
+		return "SeleniumDriverConf{" +
 			"driver=" + driver +
 			", headless=" + headless +
 			", loadImg=" + loadImg +

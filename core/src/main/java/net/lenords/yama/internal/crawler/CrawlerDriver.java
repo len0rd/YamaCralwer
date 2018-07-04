@@ -2,7 +2,7 @@ package net.lenords.yama.internal.crawler;
 
 import java.net.URL;
 
-import net.lenords.yama.internal.crawler.conf.CrawlerConf;
+import net.lenords.yama.internal.conf.SeleniumDriverConf;
 import net.lenords.yama.internal.model.request.CrawlerRequest;
 
 public interface CrawlerDriver {
@@ -17,7 +17,7 @@ public interface CrawlerDriver {
 
 	String requestAndGet(CrawlerRequest request);
 
-	CrawlerConf getConfig();
+	SeleniumDriverConf getConfig();
 
 	void close();
 

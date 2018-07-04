@@ -2,9 +2,10 @@ package net.lenords.yama.internal.model.nav;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import net.lenords.yama.internal.conf.SeleniumDriverConf;
 import net.lenords.yama.internal.crawler.SeleniumCrawlerDriver;
-import net.lenords.yama.internal.crawler.conf.CrawlerConf;
-import net.lenords.yama.internal.crawler.conf.SeleniumDriverType;
+import net.lenords.yama.internal.conf.SeleniumDriverType;
 import net.lenords.yama.internal.model.Page;
 import net.lenords.yama.internal.model.extract.RegexPattern;
 import org.junit.jupiter.api.Assertions;
@@ -90,8 +91,8 @@ public class PageTest {
   @Test
   void runPage() {
 
-    CrawlerConf conf =
-        new CrawlerConf(
+    SeleniumDriverConf conf =
+        new SeleniumDriverConf(
             SeleniumDriverType.CHROME,
             false,
             false,

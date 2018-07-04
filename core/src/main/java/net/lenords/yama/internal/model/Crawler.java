@@ -1,9 +1,7 @@
-package net.lenords.yama.internal.crawler;
+package net.lenords.yama.internal.model;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import net.lenords.yama.internal.model.Page;
 
 /**
  * @author len0rd
@@ -11,9 +9,11 @@ import net.lenords.yama.internal.model.Page;
  */
 public class Crawler {
 
+	private String name;
 	private Set<Page> pages;
 
-	public Crawler() {
+	public Crawler(String name) {
+		this.name = name;
 		this.pages = new HashSet<>();
 	}
 

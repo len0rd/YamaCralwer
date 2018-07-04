@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import net.lenords.yama.util.StrUtils;
 import net.lenords.yama.util.ProxyProvider;
-import net.lenords.yama.internal.crawler.conf.CrawlerConf;
+import net.lenords.yama.internal.conf.SeleniumDriverConf;
 import net.lenords.yama.internal.model.request.CrawlerRequest;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SessionNotCreatedException;
@@ -32,14 +32,14 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
  */
 public class SeleniumCrawlerDriver implements CrawlerDriver {
 	private WebDriver driver;
-	private CrawlerConf config;
+	private SeleniumDriverConf config;
 
-	public SeleniumCrawlerDriver(CrawlerConf driverConf, ProxyProvider proxyProvider) {
+	public SeleniumCrawlerDriver(SeleniumDriverConf driverConf, ProxyProvider proxyProvider) {
 		this.config = driverConf;
 		initDriver(driverConf, proxyProvider);
 	}
 
-	public SeleniumCrawlerDriver(CrawlerConf driverConf) {
+	public SeleniumCrawlerDriver(SeleniumDriverConf driverConf) {
 		this.config = driverConf;
 		// String yamaKurora = "山クローラ"; //Yama Kurōra
 		initDriver(driverConf, null);
@@ -155,7 +155,7 @@ public class SeleniumCrawlerDriver implements CrawlerDriver {
 		return driver.toString();
 	}
 
-	public CrawlerConf getConfig() {
+	public SeleniumDriverConf getConfig() {
 		return config;
 	}
 
@@ -178,7 +178,7 @@ public class SeleniumCrawlerDriver implements CrawlerDriver {
 		}
 	}
 
-	private void initDriver(CrawlerConf config, ProxyProvider proxyProvider) {
+	private void initDriver(SeleniumDriverConf config, ProxyProvider proxyProvider) {
 		switch (config.getDriverType()) {
 			case CHROME: // Properly configure the chrome driver:
 				Map<String, Object> additonalPrefs = new HashMap<>();

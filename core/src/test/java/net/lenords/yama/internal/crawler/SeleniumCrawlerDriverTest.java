@@ -1,8 +1,8 @@
 package net.lenords.yama.internal.crawler;
 
+import net.lenords.yama.internal.conf.SeleniumDriverConf;
+import net.lenords.yama.internal.conf.SeleniumDriverType;
 import net.lenords.yama.util.ProxyProvider;
-import net.lenords.yama.internal.crawler.conf.CrawlerConf;
-import net.lenords.yama.internal.crawler.conf.SeleniumDriverType;
 import net.lenords.yama.internal.model.request.CrawlerRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ public class SeleniumCrawlerDriverTest {
   @org.junit.jupiter.api.Test
   void basicInstantiation_HtmlUnit() {
 
-    CrawlerConf conf = new CrawlerConf(SeleniumDriverType.HTMLUNIT, false, false);
+    SeleniumDriverConf conf = new SeleniumDriverConf(SeleniumDriverType.HTMLUNIT, false, false);
     SeleniumCrawlerDriver cd1 = new SeleniumCrawlerDriver(conf);
     assertSuccessfulInstantiation(SeleniumDriverType.HTMLUNIT, cd1);
     cd1.close();
@@ -34,7 +34,7 @@ public class SeleniumCrawlerDriverTest {
   @org.junit.jupiter.api.Test
   void basicInstantiation_Chrome() {
     System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
-    CrawlerConf conf = new CrawlerConf(SeleniumDriverType.CHROME, false, false);
+    SeleniumDriverConf conf = new SeleniumDriverConf(SeleniumDriverType.CHROME, false, false);
     SeleniumCrawlerDriver cd1 = new SeleniumCrawlerDriver(conf);
     assertSuccessfulInstantiation(SeleniumDriverType.CHROME, cd1);
     cd1.close();
@@ -43,7 +43,7 @@ public class SeleniumCrawlerDriverTest {
   @org.junit.jupiter.api.Test
   void basicInstantiation_Firefox() {
     System.setProperty("webdriver.gecko.driver", "/usr/local/bin/geckodriver");
-    CrawlerConf conf = new CrawlerConf(SeleniumDriverType.FIREFOX, false, false);
+    SeleniumDriverConf conf = new SeleniumDriverConf(SeleniumDriverType.FIREFOX, false, false);
     SeleniumCrawlerDriver cd1 = new SeleniumCrawlerDriver(conf);
     assertSuccessfulInstantiation(SeleniumDriverType.FIREFOX, cd1);
     cd1.close();
@@ -52,8 +52,8 @@ public class SeleniumCrawlerDriverTest {
   @org.junit.jupiter.api.Test
   void basicInstantiationDebugMode_Chrome() {
     System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
-    CrawlerConf conf =
-        new CrawlerConf(SeleniumDriverType.CHROME, false, true, true, false, null, null, 30);
+    SeleniumDriverConf conf =
+        new SeleniumDriverConf(SeleniumDriverType.CHROME, false, true, true, false, null, null, 30);
     SeleniumCrawlerDriver cd1 = new SeleniumCrawlerDriver(conf);
     assertSuccessfulInstantiation(SeleniumDriverType.CHROME, cd1);
     cd1.close();
@@ -62,8 +62,8 @@ public class SeleniumCrawlerDriverTest {
   @org.junit.jupiter.api.Test
   void basicInstantiationDebugMode_Firefox() {
     System.setProperty("webdriver.gecko.driver", "/usr/local/bin/geckodriver");
-    CrawlerConf conf =
-        new CrawlerConf(SeleniumDriverType.FIREFOX, false, true, true, false, null, null, 30);
+    SeleniumDriverConf conf =
+        new SeleniumDriverConf(SeleniumDriverType.FIREFOX, false, true, true, false, null, null, 30);
     SeleniumCrawlerDriver cd1 = new SeleniumCrawlerDriver(conf);
     assertSuccessfulInstantiation(SeleniumDriverType.FIREFOX, cd1);
     cd1.requestAndGet(new CrawlerRequest("https://www.google.com"));
@@ -72,8 +72,8 @@ public class SeleniumCrawlerDriverTest {
 
   @Test
   void usesProxy_HtmlUnit() {
-    CrawlerConf conf =
-        new CrawlerConf(SeleniumDriverType.HTMLUNIT, false, false, false, false, null, null, -1);
+    SeleniumDriverConf conf =
+        new SeleniumDriverConf(SeleniumDriverType.HTMLUNIT, false, false, false, false, null, null, -1);
     ProxyProvider provider = new ProxyProvider("storm", "95.211.175.167", null, null, 1, 13150);
     // ProxyProvider provider = new ProxyProvider("storm", "163.172.48.109", null, null, 1, 15005);
     // ProxyProvider provider = new ProxyProvider("microleaves", "62.210.85.27", "datalaboratory",
@@ -90,8 +90,8 @@ public class SeleniumCrawlerDriverTest {
   @Test
   void usesProxy_Chrome() {
     System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
-    CrawlerConf conf =
-        new CrawlerConf(SeleniumDriverType.CHROME, false, false, false, false, null, null, -1);
+    SeleniumDriverConf conf =
+        new SeleniumDriverConf(SeleniumDriverType.CHROME, false, false, false, false, null, null, -1);
     // ProxyProvider provider = new ProxyProvider("storm", "95.211.175.167", null, null, 1, 13150);
     ProxyProvider provider =
         new ProxyProvider(
