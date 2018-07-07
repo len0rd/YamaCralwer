@@ -1,6 +1,9 @@
 package net.lenords.yama.internal.model.extract;
 
+import net.lenords.yama.internal.conf.ExtractActionTrigger;
 import net.lenords.yama.internal.model.Action;
+
+import java.util.Map;
 
 /**
  * Basic definition for an action to extract data. There are two
@@ -17,13 +20,26 @@ import net.lenords.yama.internal.model.Action;
  *
  * @author len0rd
  */
-public interface ExtractAction<T> extends Action<T, ExtractionResult> {
+public interface ExtractAction<T> extends Action<ExtractionResult> {
+
+	void setActionSpecificContext(T actionSpecificContext);
 
 	ExtractionPattern getExtractionPattern();
 
 	ExtractionResult getExtractionResult();
 
+	ExtractionResult run(Map<String, Object> context, T actionSpecificContext);
+
 	void clearResult();
 
+	void addAction(ExtractActionTrigger trigger, Action action);
+
+	void addBeforeExtractionAction(Action action);
+
+	void addAfterEachExtractionMatchAction(Action action);
+
+	void addNoExtractionMatchAction(Action action);
+
+	void addAfterExtractionAction(Action action);
 
 }

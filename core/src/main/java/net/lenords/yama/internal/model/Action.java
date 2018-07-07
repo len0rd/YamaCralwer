@@ -1,5 +1,6 @@
 package net.lenords.yama.internal.model;
 
+import java.util.Map;
 
 /**
  * The basis for all user defined actions in a Crawler.
@@ -20,16 +21,15 @@ package net.lenords.yama.internal.model;
  *    variety of languages. Script actions are granted certain context,
  *    so that they can link into the active crawler they're associated with.
  *
- * @param <T>  Contextual input given to the action at run-time
  * @param <R>  Output from the action upon run. Should not be null regardless of
  *             success. Must implement ActionResult.
  *
  * @see ActionResult
  * @author len0rd
  */
-public interface Action<T, R extends ActionResult> {
+public interface Action<R extends ActionResult> {
 
-	R run(T context);
+	R run(Map<String, Object> context);
 
 	String getName();
 }

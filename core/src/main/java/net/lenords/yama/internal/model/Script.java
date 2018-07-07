@@ -10,7 +10,7 @@ import java.util.Map;
  * @author len0rd
  * @since 2017-07-03
  */
-public class Script implements Action<Map<String, Object>, ScriptResult> {
+public class Script implements Action<ScriptResult> {
 
 	private String name;
 	private ScriptLanguage lang;

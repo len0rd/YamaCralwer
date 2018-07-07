@@ -25,6 +25,8 @@ public class CrawlerController implements PageController.PageCallbackManager {
 
 	}
 
+	// Callback manager methods:
+
 	@Override
 	public Map<String, Object> onBeforeFetch(Map<String, Object> context, Action action) {
 		return null;

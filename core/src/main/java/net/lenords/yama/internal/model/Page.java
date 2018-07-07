@@ -56,6 +56,14 @@ public class Page {
 		return beforeFetchActions;
 	}
 
+	public void addBeforeFetchAction(Action beforeFetchAction) {
+		this.beforeFetchActions.add(beforeFetchAction);
+	}
+
+	public void addBeforeFetchActions(Action... beforeFetchActions) {
+		this.beforeFetchActions.addAll(Arrays.asList(beforeFetchActions));
+	}
+
 	public void setBeforeFetchActions(List<Action> beforeFetchActions) {
 		this.beforeFetchActions = beforeFetchActions;
 	}
@@ -64,12 +72,28 @@ public class Page {
 		return afterFetchActions;
 	}
 
+	public void addAfterFetchAction(Action afterFetchAction) {
+		this.afterFetchActions.add(afterFetchAction);
+	}
+
+	public void addAfterFetchActions(Action... afterFetchActions) {
+		this.afterFetchActions.addAll(Arrays.asList(afterFetchActions));
+	}
+
 	public void setAfterFetchActions(List<Action> afterFetchActions) {
 		this.afterFetchActions = afterFetchActions;
 	}
 
 	public List<Action> getAfterExtractActions() {
 		return afterExtractActions;
+	}
+
+	public void addAfterExtractAction(Action afterExtractAction) {
+		this.afterExtractActions.add(afterExtractAction);
+	}
+
+	public void addAfterExtractActions(Action... afterExtractActions) {
+		this.afterExtractActions.addAll(Arrays.asList(afterExtractActions));
 	}
 
 	public void setAfterExtractActions(List<Action> afterExtractActions) {

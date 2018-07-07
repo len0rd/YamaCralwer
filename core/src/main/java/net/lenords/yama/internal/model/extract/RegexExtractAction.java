@@ -1,5 +1,11 @@
 package net.lenords.yama.internal.model.extract;
 
+import net.lenords.yama.internal.conf.ExtractActionTrigger;
+import net.lenords.yama.internal.model.Action;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * Execute a Regular Expression against a given context. Generally
  * the context executed against is the raw html returned from a page load
@@ -9,11 +15,17 @@ package net.lenords.yama.internal.model.extract;
 public class RegexExtractAction implements ExtractAction<String> {
 	private RegexPattern pattern;
 	private ExtractionResult result;
+	private List<Action>[] actions;
 
 
 	public RegexExtractAction(RegexPattern pattern) {
 		this.pattern = pattern;
 		this.result = null;
+	}
+
+	@Override
+	public void setActionSpecificContext(String actionSpecificContext) {
+		
 	}
 
 	@Override
@@ -32,9 +44,40 @@ public class RegexExtractAction implements ExtractAction<String> {
 	}
 
 	@Override
-	public ExtractionResult run(String context) {
-		result = pattern.run(context);
+	public void addAction(ExtractActionTrigger trigger, Action action) {
+
+	}
+
+	@Override
+	public void addBeforeExtractionAction(Action action) {
+
+	}
+
+	@Override
+	public void addAfterEachExtractionMatchAction(Action action) {
+
+	}
+
+	@Override
+	public void addNoExtractionMatchAction(Action action) {
+
+	}
+
+	@Override
+	public void addAfterExtractionAction(Action action) {
+
+	}
+
+
+	@Override
+	public ExtractionResult run(Map<String, Object> context, String actionSpecificContext) {
+		result = pattern.run(actionSpecificContext);
 		return result;
+	}
+
+	@Override
+	public ExtractionResult run(Map<String, Object> context) {
+		return null;
 	}
 
 	@Override
