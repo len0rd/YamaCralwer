@@ -3,6 +3,8 @@ package net.lenords.yama.internal.model.extract;
 import net.lenords.yama.internal.conf.ExtractActionTrigger;
 import net.lenords.yama.internal.model.Action;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -15,12 +17,20 @@ import java.util.Map;
 public class RegexExtractAction implements ExtractAction<String> {
 	private RegexPattern pattern;
 	private ExtractionResult result;
-	private List<Action>[] actions;
+	private List<List<Action>> actions;
 
 
 	public RegexExtractAction(RegexPattern pattern) {
 		this.pattern = pattern;
 		this.result = null;
+
+		// Storing action lists in another list allows this to be easily adjusted in the
+		// event someone wants to add additional triggers
+		//TODO: Make a container object for actions for Page, Extractor, and Crawler?
+		actions = new ArrayList<>(ExtractActionTrigger.values().length);
+		for (List<Action> list : actions) {
+			list = new ArrayList<>();
+		}
 	}
 
 	@Override
@@ -44,30 +54,54 @@ public class RegexExtractAction implements ExtractAction<String> {
 	}
 
 	@Override
-	public void addAction(ExtractActionTrigger trigger, Action action) {
-
+	public List<Action> getActions(ExtractActionTrigger trigger) {
+		return this.actions.get(trigger.getIndex());
 	}
 
 	@Override
-	public void addBeforeExtractionAction(Action action) {
-
+	public void addActions(ExtractActionTrigger trigger, Action... action) {
+		this.actions.get(trigger.getIndex()).addAll(Arrays.asList(action));
 	}
 
 	@Override
-	public void addAfterEachExtractionMatchAction(Action action) {
-
+	public List<Action> getBeforeExtractionActions() {
+		return this.getActions(ExtractActionTrigger.BeforeExtraction);
 	}
 
 	@Override
-	public void addNoExtractionMatchAction(Action action) {
-
+	public void addBeforeExtractionActions(Action... actions) {
+		this.addActions(ExtractActionTrigger.BeforeExtraction, actions);
 	}
 
 	@Override
-	public void addAfterExtractionAction(Action action) {
-
+	public List<Action> getAfterEachExtractionMatchActions() {
+		return this.getActions(ExtractActionTrigger.AfterEachExtractionMatch);
 	}
 
+	@Override
+	public void addAfterEachExtractionMatchActions(Action... actions) {
+		this.addActions(ExtractActionTrigger.AfterEachExtractionMatch, actions);
+	}
+
+	@Override
+	public List<Action> getNoExtractionMatchActions() {
+		return this.getActions(ExtractActionTrigger.NoExtractionMatch);
+	}
+
+	@Override
+	public void addNoExtractionMatchActions(Action... actions) {
+		this.addActions(ExtractActionTrigger.NoExtractionMatch, actions);
+	}
+
+	@Override
+	public List<Action> getAfterExtractionActions() {
+		return this.getActions(ExtractActionTrigger.AfterExtraction);
+	}
+
+	@Override
+	public void addAfterExtractionActions(Action... actions) {
+		this.addActions(ExtractActionTrigger.AfterExtraction, actions);
+	}
 
 	@Override
 	public ExtractionResult run(Map<String, Object> context, String actionSpecificContext) {

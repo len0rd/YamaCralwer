@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import net.lenords.yama.internal.conf.PageActionTrigger;
 import net.lenords.yama.internal.model.extract.ExtractionPattern;
 import net.lenords.yama.internal.model.request.CrawlerRequest;
 
@@ -19,15 +20,19 @@ public class Page {
 	//the base, tokenized request
 	private final CrawlerRequest baseRequest;
 	private List<ExtractionPattern> extractionPatterns;
-	private List<Action> beforeFetchActions, afterFetchActions, afterExtractActions;
+	private List<List<Action>> actions;
 
 	public Page(String name, String baseURL) {
 		this.name = name;
 		this.extractionPatterns = new ArrayList<>();
 		this.baseRequest = new CrawlerRequest(baseURL);
-		this.beforeFetchActions  = new ArrayList<>();
-		this.afterFetchActions   = new ArrayList<>();
-		this.afterExtractActions = new ArrayList<>();
+		// Storing action lists in another list allows this to be easily adjusted in the
+		// event someone wants to add additional triggers
+		//TODO: way to restrict size of this list to num elements in the PageActionTrigger enum?
+		actions = new ArrayList<>(PageActionTrigger.values().length);
+		for (List<Action> list : actions) {
+			list = new ArrayList<>();
+		}
 	}
 
 	/**
@@ -52,52 +57,52 @@ public class Page {
 		this.extractionPatterns = extractionPatterns;
 	}
 
-	public List<Action> getBeforeFetchActions() {
-		return beforeFetchActions;
+	public List<Action> getActions(PageActionTrigger trigger) {
+		return actions.get(trigger.getIndex());
 	}
 
-	public void addBeforeFetchAction(Action beforeFetchAction) {
-		this.beforeFetchActions.add(beforeFetchAction);
+	public void addActions(PageActionTrigger trigger, Action... actions) {
+		this.actions.get(trigger.getIndex()).addAll(Arrays.asList(actions));
+	}
+
+	public void setActions(PageActionTrigger trigger, List<Action> actions) {
+		this.actions.set(trigger.getIndex(), actions);
+	}
+
+	public List<Action> getBeforeFetchActions() {
+		return this.getActions(PageActionTrigger.BeforeFetch);
 	}
 
 	public void addBeforeFetchActions(Action... beforeFetchActions) {
-		this.beforeFetchActions.addAll(Arrays.asList(beforeFetchActions));
+		this.addActions(PageActionTrigger.BeforeFetch, beforeFetchActions);
 	}
 
 	public void setBeforeFetchActions(List<Action> beforeFetchActions) {
-		this.beforeFetchActions = beforeFetchActions;
+		this.setActions(PageActionTrigger.BeforeFetch, beforeFetchActions);
 	}
 
 	public List<Action> getAfterFetchActions() {
-		return afterFetchActions;
-	}
-
-	public void addAfterFetchAction(Action afterFetchAction) {
-		this.afterFetchActions.add(afterFetchAction);
+		return this.getActions(PageActionTrigger.AfterFetch);
 	}
 
 	public void addAfterFetchActions(Action... afterFetchActions) {
-		this.afterFetchActions.addAll(Arrays.asList(afterFetchActions));
+		this.addActions(PageActionTrigger.AfterFetch, afterFetchActions);
 	}
 
 	public void setAfterFetchActions(List<Action> afterFetchActions) {
-		this.afterFetchActions = afterFetchActions;
+		this.setActions(PageActionTrigger.AfterFetch, afterFetchActions);
 	}
 
 	public List<Action> getAfterExtractActions() {
-		return afterExtractActions;
-	}
-
-	public void addAfterExtractAction(Action afterExtractAction) {
-		this.afterExtractActions.add(afterExtractAction);
+		return this.getActions(PageActionTrigger.AfterExtract);
 	}
 
 	public void addAfterExtractActions(Action... afterExtractActions) {
-		this.afterExtractActions.addAll(Arrays.asList(afterExtractActions));
+		this.addActions(PageActionTrigger.AfterExtract, afterExtractActions);
 	}
 
 	public void setAfterExtractActions(List<Action> afterExtractActions) {
-		this.afterExtractActions = afterExtractActions;
+		this.setActions(PageActionTrigger.AfterExtract, afterExtractActions);
 	}
 
 	public ExtractionPattern getExtractor(String extractorName) {

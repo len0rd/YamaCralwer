@@ -3,6 +3,7 @@ package net.lenords.yama.internal.model.extract;
 import net.lenords.yama.internal.conf.ExtractActionTrigger;
 import net.lenords.yama.internal.model.Action;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,14 +33,24 @@ public interface ExtractAction<T> extends Action<ExtractionResult> {
 
 	void clearResult();
 
-	void addAction(ExtractActionTrigger trigger, Action action);
+	List<Action> getActions(ExtractActionTrigger trigger);
 
-	void addBeforeExtractionAction(Action action);
+	void addActions(ExtractActionTrigger trigger, Action... action);
 
-	void addAfterEachExtractionMatchAction(Action action);
+	List<Action> getBeforeExtractionActions();
 
-	void addNoExtractionMatchAction(Action action);
+	void addBeforeExtractionActions(Action... actions);
 
-	void addAfterExtractionAction(Action action);
+	List<Action> getAfterEachExtractionMatchActions();
+
+	void addAfterEachExtractionMatchActions(Action... actions);
+
+	List<Action> getNoExtractionMatchActions();
+
+	void addNoExtractionMatchActions(Action... actions);
+
+	List<Action> getAfterExtractionActions();
+
+	void addAfterExtractionActions(Action... actions);
 
 }
