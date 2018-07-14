@@ -1,6 +1,7 @@
 package net.lenords.yama.util;
 
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -67,6 +68,15 @@ public class StrUtils {
 
 	public static String regexGet(String s, String Regex, boolean caseSensitive) {
 		return regexGet(s, Regex, caseSensitive, 0);
+	}
+
+	public static String getRandomHexString(int length) {
+		Random r = new Random();
+		StringBuffer sb = new StringBuffer();
+		while(sb.length() < length){
+			sb.append(Integer.toHexString(r.nextInt()));
+		}
+		return sb.toString().substring(0, length);
 	}
 
 	public static String stripHtml(String s) {

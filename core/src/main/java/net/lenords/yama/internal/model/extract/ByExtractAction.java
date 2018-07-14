@@ -4,7 +4,6 @@ import net.lenords.yama.internal.conf.ExtractActionTrigger;
 import net.lenords.yama.internal.crawler.CrawlerDriver;
 import net.lenords.yama.internal.crawler.SeleniumCrawlerDriver;
 import net.lenords.yama.internal.model.Action;
-import net.lenords.yama.internal.model.Crawler;
 
 import java.util.Map;
 
