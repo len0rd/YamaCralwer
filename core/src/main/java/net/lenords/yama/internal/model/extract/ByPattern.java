@@ -3,6 +3,7 @@ package net.lenords.yama.internal.model.extract;
 import java.util.List;
 
 import net.lenords.yama.internal.crawler.SeleniumCrawlerDriver;
+import org.openqa.selenium.By;
 
 /**
  * Represents a By pattern. By's are used within Selenium to select specific HTML tags based on
@@ -12,6 +13,17 @@ import net.lenords.yama.internal.crawler.SeleniumCrawlerDriver;
  * @since 2018-03-21
  */
 public class ByPattern implements ExtractionPattern<SeleniumCrawlerDriver> {
+	private String name;
+	private By by;
+
+	public ByPattern(String name) {
+		this.name = name;
+	}
+
+	public ByPattern() {
+		this("By Extractor Pattern");
+	}
+
 
 	@Override
 	public SeleniumCrawlerDriver build() {
@@ -35,6 +47,6 @@ public class ByPattern implements ExtractionPattern<SeleniumCrawlerDriver> {
 
 	@Override
 	public String getName() {
-		return null;
+		return name;
 	}
 }

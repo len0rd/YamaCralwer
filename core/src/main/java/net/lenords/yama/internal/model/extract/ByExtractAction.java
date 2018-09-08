@@ -1,9 +1,7 @@
 package net.lenords.yama.internal.model.extract;
 
-import net.lenords.yama.internal.conf.ExtractActionTrigger;
 import net.lenords.yama.internal.crawler.CrawlerDriver;
 import net.lenords.yama.internal.crawler.SeleniumCrawlerDriver;
-import net.lenords.yama.internal.model.Action;
 
 import java.util.Map;
 
@@ -14,13 +12,15 @@ import java.util.Map;
  *
  * @author len0rd
  */
-public class ByExtractAction implements ExtractAction<CrawlerDriver> {
+public class ByExtractAction extends AbstractExtractAction<CrawlerDriver> {
 	private ByPattern pattern;
 	private ExtractionResult result;
 
 
 	public ByExtractAction(ByPattern pattern) {
+		super();
 		this.pattern = pattern;
+		this.result = null;
 	}
 
 	@Override
@@ -44,38 +44,14 @@ public class ByExtractAction implements ExtractAction<CrawlerDriver> {
 	}
 
 	@Override
-	public void addAction(ExtractActionTrigger trigger, Action action) {
-
-	}
-
-	@Override
-	public void addBeforeExtractionAction(Action action) {
-
-	}
-
-	@Override
-	public void addAfterEachExtractionMatchAction(Action action) {
-
-	}
-
-	@Override
-	public void addNoExtractionMatchAction(Action action) {
-
-	}
-
-	@Override
-	public void addAfterExtractionAction(Action action) {
-
-	}
-
-	@Override
 	public ExtractionResult run(Map<String, Object> context) {
-		return pattern.buildAndRun((SeleniumCrawlerDriver) context);
+		return null;
 	}
 
 	@Override
 	public ExtractionResult run(Map<String, Object> context, CrawlerDriver crawlerDriver) {
-		return null;
+		result = pattern.run((SeleniumCrawlerDriver) crawlerDriver);
+		return result;
 	}
 
 	@Override
